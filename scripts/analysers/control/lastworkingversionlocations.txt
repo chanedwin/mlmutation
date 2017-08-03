@@ -1,0 +1,161 @@
+Jan-25 05:21:48.325 [main] DEBUG nextflow.cli.Launcher - $> /usr/local/bio/nextflow-0.21.3.3990/nextflow keraspipelineneuralnet.nf
+Jan-25 05:21:48.397 [main] INFO  nextflow.cli.CmdRun - N E X T F L O W  ~  version 0.21.3
+Jan-25 05:21:48.397 [main] INFO  nextflow.cli.CmdRun - Launching keraspipelineneuralnet.nf
+Jan-25 05:21:48.414 [main] DEBUG nextflow.config.ConfigBuilder - Found config local: nextflow.config
+Jan-25 05:21:48.416 [main] DEBUG nextflow.config.ConfigBuilder - Parsing config file: /data/backup/metacaller/stage/deeplearnvcf/version6.9a-AB-2slowlr/control/nextflow.config
+Jan-25 05:21:48.766 [main] DEBUG nextflow.config.ConfigBuilder - Setting config profile: 'standard'
+Jan-25 05:21:48.907 [main] DEBUG nextflow.Session - Session uuid: 7b10e01a-718e-446d-a737-4a36734a3aef
+Jan-25 05:21:48.910 [main] DEBUG nextflow.Session - Executor pool size: 40
+Jan-25 05:21:48.943 [main] DEBUG nextflow.cli.CmdRun - 
+  Version: 0.21.3 build 3990
+  Modified: 26-08-2016 17:07 UTC (27-08-2016 01:07 SGST)
+  System: Linux 3.10.0-327.18.2.el7.x86_64
+  Runtime: Groovy 2.4.7 on OpenJDK 64-Bit Server VM 1.8.0_101-b13
+  Encoding: UTF-8 (UTF-8)
+  Process: 32181@bchdb [137.132.97.23]
+  CPUs: 40 - Mem: 377.7 GB (7.9 GB) - Swap: 4 GB (755.5 MB)
+Jan-25 05:21:48.981 [main] DEBUG nextflow.Session - Work-dir: /data/backup/metacaller/stage/deeplearnvcf/version6.9a-AB-2slowlr/control/work [xfs]
+Jan-25 05:21:48.983 [main] DEBUG nextflow.Session - Script base path does not exist or is not a directory: /data/backup/metacaller/stage/deeplearnvcf/version6.9a-AB-2slowlr/control/bin
+Jan-25 05:21:48.983 [main] DEBUG nextflow.Session - Session start invoked
+Jan-25 05:21:48.986 [main] DEBUG nextflow.processor.TaskDispatcher - Dispatcher > start
+Jan-25 05:21:48.987 [main] DEBUG nextflow.script.ScriptRunner - > Script parsing
+Jan-25 05:21:49.221 [main] DEBUG nextflow.script.ScriptRunner - > Launching execution
+Jan-25 05:21:49.309 [main] DEBUG nextflow.processor.ProcessFactory - << taskConfig executor: sge
+Jan-25 05:21:49.309 [main] DEBUG nextflow.processor.ProcessFactory - >> processorType: 'sge'
+Jan-25 05:21:49.332 [main] DEBUG nextflow.executor.Executor - Initializing executor: sge
+Jan-25 05:21:49.334 [main] INFO  nextflow.executor.Executor - [warm up] executor > sge
+Jan-25 05:21:49.347 [main] DEBUG n.processor.TaskPollingMonitor - Creating task monitor for executor 'sge' > capacity: 100; pollInterval: 1s; dumpInterval: 5m 
+Jan-25 05:21:49.350 [main] DEBUG nextflow.processor.TaskDispatcher - Starting monitor: TaskPollingMonitor
+Jan-25 05:21:49.351 [main] DEBUG n.processor.TaskPollingMonitor - >>> barrier register (monitor: sge)
+Jan-25 05:21:49.354 [main] DEBUG nextflow.executor.Executor - Invoke register for executor: sge
+Jan-25 05:21:49.356 [main] DEBUG n.executor.AbstractGridExecutor - Creating executor 'sge' > queue-stat-interval: 1m
+Jan-25 05:21:49.470 [main] DEBUG nextflow.Session - >>> barrier register (process: movefiles)
+Jan-25 05:21:49.510 [main] DEBUG nextflow.processor.TaskProcessor - Creating operator > movefiles -- maxForks: 40
+Jan-25 05:21:49.602 [main] DEBUG nextflow.processor.ProcessFactory - << taskConfig executor: sge
+Jan-25 05:21:49.602 [main] DEBUG nextflow.processor.ProcessFactory - >> processorType: 'sge'
+Jan-25 05:21:49.602 [main] DEBUG nextflow.executor.Executor - Initializing executor: sge
+Jan-25 05:21:49.603 [main] DEBUG n.executor.AbstractGridExecutor - Creating executor 'sge' > queue-stat-interval: 1m
+Jan-25 05:21:49.610 [main] DEBUG nextflow.Session - >>> barrier register (process: generatetruth)
+Jan-25 05:21:49.611 [Actor Thread 1] DEBUG nextflow.processor.TaskProcessor - <movefiles> Poison pill arrived
+Jan-25 05:21:49.624 [Actor Thread 2] DEBUG nextflow.processor.StateObj - <movefiles> State before poison: StateObj[submitted: 1; completed: 0; poisoned: false ]
+Jan-25 05:21:49.630 [main] DEBUG nextflow.processor.TaskProcessor - Creating operator > generatetruth -- maxForks: 40
+Jan-25 05:21:49.641 [main] DEBUG nextflow.processor.ProcessFactory - << taskConfig executor: sge
+Jan-25 05:21:49.642 [main] DEBUG nextflow.processor.ProcessFactory - >> processorType: 'sge'
+Jan-25 05:21:49.642 [main] DEBUG nextflow.executor.Executor - Initializing executor: sge
+Jan-25 05:21:49.642 [main] DEBUG n.executor.AbstractGridExecutor - Creating executor 'sge' > queue-stat-interval: 1m
+Jan-25 05:21:49.648 [main] DEBUG nextflow.Session - >>> barrier register (process: concord1)
+Jan-25 05:21:49.664 [main] DEBUG nextflow.processor.TaskProcessor - Creating operator > concord1 -- maxForks: 40
+Jan-25 05:21:49.668 [main] DEBUG nextflow.processor.ProcessFactory - << taskConfig executor: sge
+Jan-25 05:21:49.669 [main] DEBUG nextflow.processor.ProcessFactory - >> processorType: 'sge'
+Jan-25 05:21:49.669 [main] DEBUG nextflow.executor.Executor - Initializing executor: sge
+Jan-25 05:21:49.669 [main] DEBUG n.executor.AbstractGridExecutor - Creating executor 'sge' > queue-stat-interval: 1m
+Jan-25 05:21:49.670 [main] DEBUG nextflow.Session - >>> barrier register (process: concord2)
+Jan-25 05:21:49.679 [main] DEBUG nextflow.processor.TaskProcessor - Creating operator > concord2 -- maxForks: 40
+Jan-25 05:21:49.682 [main] DEBUG nextflow.processor.ProcessFactory - << taskConfig executor: sge
+Jan-25 05:21:49.682 [main] DEBUG nextflow.processor.ProcessFactory - >> processorType: 'sge'
+Jan-25 05:21:49.682 [main] DEBUG nextflow.executor.Executor - Initializing executor: sge
+Jan-25 05:21:49.683 [main] DEBUG n.executor.AbstractGridExecutor - Creating executor 'sge' > queue-stat-interval: 1m
+Jan-25 05:21:49.684 [main] DEBUG nextflow.Session - >>> barrier register (process: concord3)
+Jan-25 05:21:49.696 [main] DEBUG nextflow.processor.TaskProcessor - Creating operator > concord3 -- maxForks: 40
+Jan-25 05:21:49.704 [Actor Thread 3] DEBUG nextflow.executor.GridTaskHandler - Launching process > movefiles (1) -- work folder: /data/backup/metacaller/stage/deeplearnvcf/version6.9a-AB-2slowlr/control/work/11/de9c1e4bc46b3df58caba07a780f96
+Jan-25 05:21:49.706 [main] DEBUG nextflow.processor.ProcessFactory - << taskConfig executor: sge
+Jan-25 05:21:49.707 [main] DEBUG nextflow.processor.ProcessFactory - >> processorType: 'sge'
+Jan-25 05:21:49.707 [main] DEBUG nextflow.executor.Executor - Initializing executor: sge
+Jan-25 05:21:49.707 [main] DEBUG n.executor.AbstractGridExecutor - Creating executor 'sge' > queue-stat-interval: 1m
+Jan-25 05:21:49.709 [main] DEBUG nextflow.Session - >>> barrier register (process: concord4)
+Jan-25 05:21:49.722 [main] DEBUG nextflow.processor.TaskProcessor - Creating operator > concord4 -- maxForks: 40
+Jan-25 05:21:49.731 [main] DEBUG nextflow.processor.ProcessFactory - << taskConfig executor: sge
+Jan-25 05:21:49.732 [main] DEBUG nextflow.processor.ProcessFactory - >> processorType: 'sge'
+Jan-25 05:21:49.732 [main] DEBUG nextflow.executor.Executor - Initializing executor: sge
+Jan-25 05:21:49.732 [main] DEBUG n.executor.AbstractGridExecutor - Creating executor 'sge' > queue-stat-interval: 1m
+Jan-25 05:21:49.733 [main] DEBUG nextflow.Session - >>> barrier register (process: concord5)
+Jan-25 05:21:49.742 [main] DEBUG nextflow.processor.TaskProcessor - Creating operator > concord5 -- maxForks: 40
+Jan-25 05:21:49.748 [main] DEBUG nextflow.processor.ProcessFactory - << taskConfig executor: sge
+Jan-25 05:21:49.748 [main] DEBUG nextflow.processor.ProcessFactory - >> processorType: 'sge'
+Jan-25 05:21:49.748 [main] DEBUG nextflow.executor.Executor - Initializing executor: sge
+Jan-25 05:21:49.748 [main] DEBUG n.executor.AbstractGridExecutor - Creating executor 'sge' > queue-stat-interval: 1m
+Jan-25 05:21:49.752 [main] DEBUG nextflow.Session - >>> barrier register (process: concord6)
+Jan-25 05:21:49.761 [main] DEBUG nextflow.processor.TaskProcessor - Creating operator > concord6 -- maxForks: 40
+Jan-25 05:21:49.762 [main] DEBUG nextflow.script.ScriptRunner - > Await termination 
+Jan-25 05:21:49.763 [main] DEBUG nextflow.Session - Session await
+Jan-25 05:21:49.838 [Actor Thread 3] INFO  nextflow.Session - [11/de9c1e] Submitted process > movefiles (1)
+Jan-25 05:21:49.840 [Actor Thread 1] DEBUG nextflow.processor.TaskProcessor - <movefiles> After stop
+Jan-25 05:22:04.438 [Actor Thread 2] DEBUG nextflow.processor.TaskProcessor - <movefiles> Sending poison pills and terminating process
+Jan-25 05:22:04.440 [Actor Thread 6] DEBUG nextflow.processor.TaskProcessor - <concord1> Poison pill arrived
+Jan-25 05:22:04.445 [Actor Thread 15] DEBUG nextflow.processor.TaskProcessor - <concord3> Poison pill arrived
+Jan-25 05:22:04.456 [Actor Thread 17] DEBUG nextflow.processor.TaskProcessor - <concord5> Poison pill arrived
+Jan-25 05:22:04.457 [Actor Thread 7] DEBUG nextflow.processor.TaskProcessor - <generatetruth> Poison pill arrived
+Jan-25 05:22:04.457 [Actor Thread 14] DEBUG nextflow.processor.TaskProcessor - <concord2> Poison pill arrived
+Jan-25 05:22:04.457 [Actor Thread 2] DEBUG nextflow.Session - <<< barrier arrive (process: movefiles)
+Jan-25 05:22:04.458 [Actor Thread 16] DEBUG nextflow.processor.TaskProcessor - <concord4> Poison pill arrived
+Jan-25 05:22:04.459 [Actor Thread 9] DEBUG nextflow.processor.StateObj - <concord1> State before poison: StateObj[submitted: 1; completed: 0; poisoned: false ]
+Jan-25 05:22:04.461 [Actor Thread 19] DEBUG nextflow.processor.TaskProcessor - <concord6> Poison pill arrived
+Jan-25 05:22:04.461 [Actor Thread 9] DEBUG nextflow.processor.StateObj - <concord6> State before poison: StateObj[submitted: 1; completed: 0; poisoned: false ]
+Jan-25 05:22:04.460 [Actor Thread 22] DEBUG nextflow.processor.StateObj - <concord2> State before poison: StateObj[submitted: 1; completed: 0; poisoned: false ]
+Jan-25 05:22:04.462 [Actor Thread 20] DEBUG nextflow.processor.StateObj - <concord5> State before poison: StateObj[submitted: 1; completed: 0; poisoned: false ]
+Jan-25 05:22:04.474 [Actor Thread 21] DEBUG nextflow.processor.StateObj - <generatetruth> State before poison: StateObj[submitted: 1; completed: 0; poisoned: false ]
+Jan-25 05:22:04.475 [Actor Thread 18] DEBUG nextflow.processor.StateObj - <concord3> State before poison: StateObj[submitted: 1; completed: 0; poisoned: false ]
+Jan-25 05:22:04.484 [Actor Thread 23] DEBUG nextflow.processor.StateObj - <concord4> State before poison: StateObj[submitted: 1; completed: 0; poisoned: false ]
+Jan-25 05:22:04.488 [Actor Thread 1] DEBUG nextflow.executor.GridTaskHandler - Launching process > concord1 (1) -- work folder: /data/backup/metacaller/stage/deeplearnvcf/version6.9a-AB-2slowlr/control/work/0d/3aa9742a18e89a9e9e7702d3d358fd
+Jan-25 05:22:04.521 [Actor Thread 1] INFO  nextflow.Session - [0d/3aa974] Submitted process > concord1 (1)
+Jan-25 05:22:04.521 [Actor Thread 10] DEBUG nextflow.executor.GridTaskHandler - Launching process > concord6 (1) -- work folder: /data/backup/metacaller/stage/deeplearnvcf/version6.9a-AB-2slowlr/control/work/40/101bb156ba6ca7ffc583bb7db25016
+Jan-25 05:22:04.522 [Actor Thread 6] DEBUG nextflow.processor.TaskProcessor - <concord1> After stop
+Jan-25 05:22:04.564 [Actor Thread 10] INFO  nextflow.Session - [40/101bb1] Submitted process > concord6 (1)
+Jan-25 05:22:04.564 [Actor Thread 5] DEBUG nextflow.executor.GridTaskHandler - Launching process > concord4 (1) -- work folder: /data/backup/metacaller/stage/deeplearnvcf/version6.9a-AB-2slowlr/control/work/36/fdfd315efa9a8ccf779c6f42144cf0
+Jan-25 05:22:04.564 [Actor Thread 19] DEBUG nextflow.processor.TaskProcessor - <concord6> After stop
+Jan-25 05:22:04.606 [Actor Thread 11] DEBUG nextflow.executor.GridTaskHandler - Launching process > concord3 (1) -- work folder: /data/backup/metacaller/stage/deeplearnvcf/version6.9a-AB-2slowlr/control/work/f5/ec10d77a679ef0b7d3061221fcd16d
+Jan-25 05:22:04.607 [Actor Thread 5] INFO  nextflow.Session - [36/fdfd31] Submitted process > concord4 (1)
+Jan-25 05:22:04.608 [Actor Thread 16] DEBUG nextflow.processor.TaskProcessor - <concord4> After stop
+Jan-25 05:22:04.637 [Actor Thread 13] DEBUG nextflow.executor.GridTaskHandler - Launching process > concord5 (1) -- work folder: /data/backup/metacaller/stage/deeplearnvcf/version6.9a-AB-2slowlr/control/work/4a/01b0c4184beece3ce7482182e28d4a
+Jan-25 05:22:04.639 [Actor Thread 11] INFO  nextflow.Session - [f5/ec10d7] Submitted process > concord3 (1)
+Jan-25 05:22:04.640 [Actor Thread 15] DEBUG nextflow.processor.TaskProcessor - <concord3> After stop
+Jan-25 05:22:04.672 [Actor Thread 13] INFO  nextflow.Session - [4a/01b0c4] Submitted process > concord5 (1)
+Jan-25 05:22:04.672 [Actor Thread 12] DEBUG nextflow.executor.GridTaskHandler - Launching process > concord2 (1) -- work folder: /data/backup/metacaller/stage/deeplearnvcf/version6.9a-AB-2slowlr/control/work/9e/4dc11168508936e951171370fa4f30
+Jan-25 05:22:04.673 [Actor Thread 17] DEBUG nextflow.processor.TaskProcessor - <concord5> After stop
+Jan-25 05:22:04.710 [Actor Thread 12] INFO  nextflow.Session - [9e/4dc111] Submitted process > concord2 (1)
+Jan-25 05:22:04.710 [Actor Thread 8] DEBUG nextflow.executor.GridTaskHandler - Launching process > generatetruth (1) -- work folder: /data/backup/metacaller/stage/deeplearnvcf/version6.9a-AB-2slowlr/control/work/b8/7bf2dc59bd192a04392d9b53100b52
+Jan-25 05:22:04.711 [Actor Thread 14] DEBUG nextflow.processor.TaskProcessor - <concord2> After stop
+Jan-25 05:22:04.746 [Actor Thread 8] INFO  nextflow.Session - [b8/7bf2dc] Submitted process > generatetruth (1)
+Jan-25 05:22:04.746 [Actor Thread 7] DEBUG nextflow.processor.TaskProcessor - <generatetruth> After stop
+Jan-25 05:26:50.431 [Thread-2] DEBUG n.processor.TaskPollingMonitor - !! executor sge > tasks to be completed: 7 -- first: TaskHandler[jobId: 7983; id: 2; name: concord1 (1); status: RUNNING; exit: -; workDir: /data/backup/metacaller/stage/deeplearnvcf/version6.9a-AB-2slowlr/control/work/0d/3aa9742a18e89a9e9e7702d3d358fd started: 1485292939366; exited: -; ]
+Jan-25 05:31:50.480 [Thread-2] DEBUG n.processor.TaskPollingMonitor - !! executor sge > tasks to be completed: 7 -- first: TaskHandler[jobId: 7983; id: 2; name: concord1 (1); status: RUNNING; exit: -; workDir: /data/backup/metacaller/stage/deeplearnvcf/version6.9a-AB-2slowlr/control/work/0d/3aa9742a18e89a9e9e7702d3d358fd started: 1485292939366; exited: -; ]
+Jan-25 05:31:53.483 [Actor Thread 23] DEBUG nextflow.processor.TaskProcessor - <concord3> Sending poison pills and terminating process
+Jan-25 05:31:53.483 [Actor Thread 23] DEBUG nextflow.Session - <<< barrier arrive (process: concord3)
+Jan-25 05:31:55.483 [Actor Thread 23] DEBUG nextflow.processor.TaskProcessor - <concord5> Sending poison pills and terminating process
+Jan-25 05:31:55.483 [Actor Thread 23] DEBUG nextflow.Session - <<< barrier arrive (process: concord5)
+Jan-25 05:31:57.483 [Actor Thread 23] DEBUG nextflow.processor.TaskProcessor - <concord1> Sending poison pills and terminating process
+Jan-25 05:31:57.483 [Actor Thread 23] DEBUG nextflow.Session - <<< barrier arrive (process: concord1)
+Jan-25 05:31:57.483 [Actor Thread 23] DEBUG nextflow.processor.TaskProcessor - <concord6> Sending poison pills and terminating process
+Jan-25 05:31:57.483 [Actor Thread 23] DEBUG nextflow.Session - <<< barrier arrive (process: concord6)
+Jan-25 05:32:42.488 [Actor Thread 23] DEBUG nextflow.processor.TaskProcessor - <concord4> Sending poison pills and terminating process
+Jan-25 05:32:42.488 [Actor Thread 23] DEBUG nextflow.Session - <<< barrier arrive (process: concord4)
+Jan-25 05:32:57.490 [Actor Thread 23] DEBUG nextflow.processor.TaskProcessor - <concord2> Sending poison pills and terminating process
+Jan-25 05:32:57.491 [Actor Thread 23] DEBUG nextflow.Session - <<< barrier arrive (process: concord2)
+Jan-25 05:36:50.526 [Thread-2] DEBUG n.processor.TaskPollingMonitor - !! executor sge > tasks to be completed: 1 -- first: TaskHandler[jobId: 7989; id: 5; name: generatetruth (1); status: RUNNING; exit: -; workDir: /data/backup/metacaller/stage/deeplearnvcf/version6.9a-AB-2slowlr/control/work/b8/7bf2dc59bd192a04392d9b53100b52 started: 1485292939370; exited: -; ]
+Jan-25 05:41:50.578 [Thread-2] DEBUG n.processor.TaskPollingMonitor - !! executor sge > tasks to be completed: 1 -- first: TaskHandler[jobId: 7989; id: 5; name: generatetruth (1); status: RUNNING; exit: -; workDir: /data/backup/metacaller/stage/deeplearnvcf/version6.9a-AB-2slowlr/control/work/b8/7bf2dc59bd192a04392d9b53100b52 started: 1485292939370; exited: -; ]
+Jan-25 05:46:50.645 [Thread-2] DEBUG n.processor.TaskPollingMonitor - !! executor sge > tasks to be completed: 1 -- first: TaskHandler[jobId: 7989; id: 5; name: generatetruth (1); status: RUNNING; exit: -; workDir: /data/backup/metacaller/stage/deeplearnvcf/version6.9a-AB-2slowlr/control/work/b8/7bf2dc59bd192a04392d9b53100b52 started: 1485292939370; exited: -; ]
+Jan-25 05:51:50.693 [Thread-2] DEBUG n.processor.TaskPollingMonitor - !! executor sge > tasks to be completed: 1 -- first: TaskHandler[jobId: 7989; id: 5; name: generatetruth (1); status: RUNNING; exit: -; workDir: /data/backup/metacaller/stage/deeplearnvcf/version6.9a-AB-2slowlr/control/work/b8/7bf2dc59bd192a04392d9b53100b52 started: 1485292939370; exited: -; ]
+Jan-25 05:56:50.735 [Thread-2] DEBUG n.processor.TaskPollingMonitor - !! executor sge > tasks to be completed: 1 -- first: TaskHandler[jobId: 7989; id: 5; name: generatetruth (1); status: RUNNING; exit: -; workDir: /data/backup/metacaller/stage/deeplearnvcf/version6.9a-AB-2slowlr/control/work/b8/7bf2dc59bd192a04392d9b53100b52 started: 1485292939370; exited: -; ]
+Jan-25 06:01:50.787 [Thread-2] DEBUG n.processor.TaskPollingMonitor - !! executor sge > tasks to be completed: 1 -- first: TaskHandler[jobId: 7989; id: 5; name: generatetruth (1); status: RUNNING; exit: -; workDir: /data/backup/metacaller/stage/deeplearnvcf/version6.9a-AB-2slowlr/control/work/b8/7bf2dc59bd192a04392d9b53100b52 started: 1485292939370; exited: -; ]
+Jan-25 06:06:50.826 [Thread-2] DEBUG n.processor.TaskPollingMonitor - !! executor sge > tasks to be completed: 1 -- first: TaskHandler[jobId: 7989; id: 5; name: generatetruth (1); status: RUNNING; exit: -; workDir: /data/backup/metacaller/stage/deeplearnvcf/version6.9a-AB-2slowlr/control/work/b8/7bf2dc59bd192a04392d9b53100b52 started: 1485292939370; exited: -; ]
+Jan-25 06:11:50.870 [Thread-2] DEBUG n.processor.TaskPollingMonitor - !! executor sge > tasks to be completed: 1 -- first: TaskHandler[jobId: 7989; id: 5; name: generatetruth (1); status: RUNNING; exit: -; workDir: /data/backup/metacaller/stage/deeplearnvcf/version6.9a-AB-2slowlr/control/work/b8/7bf2dc59bd192a04392d9b53100b52 started: 1485292939370; exited: -; ]
+Jan-25 06:16:50.914 [Thread-2] DEBUG n.processor.TaskPollingMonitor - !! executor sge > tasks to be completed: 1 -- first: TaskHandler[jobId: 7989; id: 5; name: generatetruth (1); status: RUNNING; exit: -; workDir: /data/backup/metacaller/stage/deeplearnvcf/version6.9a-AB-2slowlr/control/work/b8/7bf2dc59bd192a04392d9b53100b52 started: 1485292939370; exited: -; ]
+Jan-25 06:21:50.972 [Thread-2] DEBUG n.processor.TaskPollingMonitor - !! executor sge > tasks to be completed: 1 -- first: TaskHandler[jobId: 7989; id: 5; name: generatetruth (1); status: RUNNING; exit: -; workDir: /data/backup/metacaller/stage/deeplearnvcf/version6.9a-AB-2slowlr/control/work/b8/7bf2dc59bd192a04392d9b53100b52 started: 1485292939370; exited: -; ]
+Jan-25 06:26:51.020 [Thread-2] DEBUG n.processor.TaskPollingMonitor - !! executor sge > tasks to be completed: 1 -- first: TaskHandler[jobId: 7989; id: 5; name: generatetruth (1); status: RUNNING; exit: -; workDir: /data/backup/metacaller/stage/deeplearnvcf/version6.9a-AB-2slowlr/control/work/b8/7bf2dc59bd192a04392d9b53100b52 started: 1485292939370; exited: -; ]
+Jan-25 06:31:51.065 [Thread-2] DEBUG n.processor.TaskPollingMonitor - !! executor sge > tasks to be completed: 1 -- first: TaskHandler[jobId: 7989; id: 5; name: generatetruth (1); status: RUNNING; exit: -; workDir: /data/backup/metacaller/stage/deeplearnvcf/version6.9a-AB-2slowlr/control/work/b8/7bf2dc59bd192a04392d9b53100b52 started: 1485292939370; exited: -; ]
+Jan-25 06:36:51.111 [Thread-2] DEBUG n.processor.TaskPollingMonitor - !! executor sge > tasks to be completed: 1 -- first: TaskHandler[jobId: 7989; id: 5; name: generatetruth (1); status: RUNNING; exit: -; workDir: /data/backup/metacaller/stage/deeplearnvcf/version6.9a-AB-2slowlr/control/work/b8/7bf2dc59bd192a04392d9b53100b52 started: 1485292939370; exited: -; ]
+Jan-25 06:41:51.155 [Thread-2] DEBUG n.processor.TaskPollingMonitor - !! executor sge > tasks to be completed: 1 -- first: TaskHandler[jobId: 7989; id: 5; name: generatetruth (1); status: RUNNING; exit: -; workDir: /data/backup/metacaller/stage/deeplearnvcf/version6.9a-AB-2slowlr/control/work/b8/7bf2dc59bd192a04392d9b53100b52 started: 1485292939370; exited: -; ]
+Jan-25 06:46:51.196 [Thread-2] DEBUG n.processor.TaskPollingMonitor - !! executor sge > tasks to be completed: 1 -- first: TaskHandler[jobId: 7989; id: 5; name: generatetruth (1); status: RUNNING; exit: -; workDir: /data/backup/metacaller/stage/deeplearnvcf/version6.9a-AB-2slowlr/control/work/b8/7bf2dc59bd192a04392d9b53100b52 started: 1485292939370; exited: -; ]
+Jan-25 06:51:51.236 [Thread-2] DEBUG n.processor.TaskPollingMonitor - !! executor sge > tasks to be completed: 1 -- first: TaskHandler[jobId: 7989; id: 5; name: generatetruth (1); status: RUNNING; exit: -; workDir: /data/backup/metacaller/stage/deeplearnvcf/version6.9a-AB-2slowlr/control/work/b8/7bf2dc59bd192a04392d9b53100b52 started: 1485292939370; exited: -; ]
+Jan-25 06:56:51.275 [Thread-2] DEBUG n.processor.TaskPollingMonitor - !! executor sge > tasks to be completed: 1 -- first: TaskHandler[jobId: 7989; id: 5; name: generatetruth (1); status: RUNNING; exit: -; workDir: /data/backup/metacaller/stage/deeplearnvcf/version6.9a-AB-2slowlr/control/work/b8/7bf2dc59bd192a04392d9b53100b52 started: 1485292939370; exited: -; ]
+Jan-25 07:01:51.309 [Thread-2] DEBUG n.processor.TaskPollingMonitor - !! executor sge > tasks to be completed: 1 -- first: TaskHandler[jobId: 7989; id: 5; name: generatetruth (1); status: RUNNING; exit: -; workDir: /data/backup/metacaller/stage/deeplearnvcf/version6.9a-AB-2slowlr/control/work/b8/7bf2dc59bd192a04392d9b53100b52 started: 1485292939370; exited: -; ]
+Jan-25 07:06:51.364 [Thread-2] DEBUG n.processor.TaskPollingMonitor - !! executor sge > tasks to be completed: 1 -- first: TaskHandler[jobId: 7989; id: 5; name: generatetruth (1); status: RUNNING; exit: -; workDir: /data/backup/metacaller/stage/deeplearnvcf/version6.9a-AB-2slowlr/control/work/b8/7bf2dc59bd192a04392d9b53100b52 started: 1485292939370; exited: -; ]
+Jan-25 07:11:51.405 [Thread-2] DEBUG n.processor.TaskPollingMonitor - !! executor sge > tasks to be completed: 1 -- first: TaskHandler[jobId: 7989; id: 5; name: generatetruth (1); status: RUNNING; exit: -; workDir: /data/backup/metacaller/stage/deeplearnvcf/version6.9a-AB-2slowlr/control/work/b8/7bf2dc59bd192a04392d9b53100b52 started: 1485292939370; exited: -; ]
+Jan-25 07:16:51.454 [Thread-2] DEBUG n.processor.TaskPollingMonitor - !! executor sge > tasks to be completed: 1 -- first: TaskHandler[jobId: 7989; id: 5; name: generatetruth (1); status: RUNNING; exit: -; workDir: /data/backup/metacaller/stage/deeplearnvcf/version6.9a-AB-2slowlr/control/work/b8/7bf2dc59bd192a04392d9b53100b52 started: 1485292939370; exited: -; ]
+Jan-25 07:21:51.487 [Thread-2] DEBUG n.processor.TaskPollingMonitor - !! executor sge > tasks to be completed: 1 -- first: TaskHandler[jobId: 7989; id: 5; name: generatetruth (1); status: RUNNING; exit: -; workDir: /data/backup/metacaller/stage/deeplearnvcf/version6.9a-AB-2slowlr/control/work/b8/7bf2dc59bd192a04392d9b53100b52 started: 1485292939370; exited: -; ]
+Jan-25 07:22:17.494 [Actor Thread 23] DEBUG nextflow.processor.TaskProcessor - <generatetruth> Sending poison pills and terminating process
+Jan-25 07:22:17.495 [Actor Thread 23] DEBUG nextflow.Session - <<< barrier arrive (process: generatetruth)
+Jan-25 07:22:17.496 [main] DEBUG nextflow.Session - Session await > processes completed
+Jan-25 07:22:18.491 [Thread-2] DEBUG n.processor.TaskPollingMonitor - <<< barrier arrives (monitor: sge)
+Jan-25 07:22:18.491 [main] DEBUG nextflow.Session - Session await > done
+Jan-25 07:22:18.509 [main] DEBUG nextflow.Session - Session destroyed
