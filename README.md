@@ -23,13 +23,17 @@ In the training pipeline, training datasets from synthetic and real sequencing d
 
 ## Simulator Software
 
+Simulator software refers to the software used to generate simulated datasets for analysis, which is very useful as we can generate ground truths by perturbing known datasets.
+
 ___Pipelining Using NextFlow___
+
 The workflows in the training and analysis pipelines are managed using NextFlow (v0.21.3.3990), a Groovy based Domain Specific Language (DSL) that provides easy management of parallel pipelines consisting of dependent tasks organised as a directed acyclic graph (Tommaso et al., 2014). Nextflow was used to manage and coordinate the different steps in the pipelines to ensure reproducibility and scalability.
 
 _[simulators/pipelines](https://github.com/EdwinChanSingapore/mlmutation/tree/master/simulators/pipeline) contains all the pipelining software written in nextflow to automate simulator and variant calling processes._
 
 
 ___Variant Calling and Alignment___
+
 The sequence reads (FASTQ) from synthetic or real datasets are first aligned to the hg19 human reference genome using BWA (0.7.13) (Li, 2013) using the default settings. Following alignment, the alignment files (BAM) are used for variant calling with the following callers with their default settings: FreeBayes (v1.0.2-16); GATK Haplotype Caller (v3.7-0) and Unified Genotyper (v3.7-0); Samtools (v1.3.1); Pindel (v2.3.0) (Garrison & Marth, 2012; McKenna et al. 2010, DePristo et al. 2011; Li H, et al., 2009; Ye et al., 2009). 
 
 _[simulators/scripts](https://github.com/EdwinChanSingapore/mlmutation/tree/master/simulators/scripts) contains the base scripts that control the running of the variant calling software, as well as the options used to run the variant callers._
@@ -37,7 +41,10 @@ _[simulators/scripts](https://github.com/EdwinChanSingapore/mlmutation/tree/mast
 
 ## Analysis, Machine Learning and Ranking Software
 
+The analysis software contain the feature extraction and engineering component that generates features from the vcf entries, the deep learning component that initialises the machine learning network and trains it, and finally the Bayesian graphing component that performs Bayesian updating to rank the mutations in terms of importance using annotations from ANNOVAR.
+
 ___Preprocessing and Analysis___
+
 The preprocessing and analytical components are implemented using Python (v2.7) (Van Rossum, 2007) and the following Python libraries: NumPy, scikit-Learn, Pomegranate and PyVCF. Briefly, NumPy (v1.11.3) was used to prepare feature vectors for deep learning training, scikit-learn (v0.18.1) was used to perform Principal Component Analysis (PCA) and Synthetic Minority Oversampling Technique (SMOTE) methods (See Appendix 5.3.3 for details). PyVCF (v0.6.8) was used to parse the VCF files to facilitate the comparison of variants efficiently in O(1) time using hash-based dictionary lookups. 
 
 _[analysis/machinelearning](httpshttps://github.com/EdwinChanSingapore/mlmutation/tree/master/analysis/machinelearning) contains the extraction of features from the vcf files, mainly with the methods found in extractfeaturesfromvcf.py._
@@ -49,6 +56,7 @@ Deep learning networks are implemented using the Keras library (v1.1.1) with a T
 _[analysis/machinelearning](httpshttps://github.com/EdwinChanSingapore/mlmutation/tree/master/analysis/machinelearning) contains the scripts that control initialisation and training of the neural network, particularly in generatematrixesforneuralnet.py and generateresultsforneuralnet._
 
 ___Bayesian Network Ranking of Mutations___
+
 For the Bayesian ranking of mutations, the high confidence calls from the deep learning network are annotated using ANNOVAR (v2015Jun17) (Wang, Li, & Hakonarson, 2010). The annotated features for each variant are used as inputs to the Bayesian network, which was implemented using Pomegranate (v0.6.1), a Python library for Bayesian analysis. 
 
 [analysis/prediction](https://github.com/EdwinChanSingapore/mlmutation/tree/master/analysis/prediction) contains the scripts that build the bayesian ranking network and the accompany graphs and networks.
