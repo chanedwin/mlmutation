@@ -47,13 +47,13 @@ ___Preprocessing and Analysis___
 
 The preprocessing and analytical components are implemented using Python (v2.7) (Van Rossum, 2007) and the following Python libraries: NumPy, scikit-Learn, Pomegranate and PyVCF. Briefly, NumPy (v1.11.3) was used to prepare feature vectors for deep learning training, scikit-learn (v0.18.1) was used to perform Principal Component Analysis (PCA) and Synthetic Minority Oversampling Technique (SMOTE) methods (See Appendix 5.3.3 for details). PyVCF (v0.6.8) was used to parse the VCF files to facilitate the comparison of variants efficiently in O(1) time using hash-based dictionary lookups. 
 
-_[analysis/machinelearning](httpshttps://github.com/EdwinChanSingapore/mlmutation/tree/master/analysis/machinelearning) contains the extraction of features from the vcf files, mainly with the methods found in extractfeaturesfromvcf.py._
+_[analysis/machinelearning](https://github.com/EdwinChanSingapore/mlmutation/tree/master/analysis/machinelearning) contains the extraction of features from the vcf files, mainly with the methods found in extractfeaturesfromvcf.py._
 
 ___Deep Learning Networks___
 
 Deep learning networks are implemented using the Keras library (v1.1.1) with a TensorFlow backend (v0.11.0). TensorFlow, from Google (Abadi et al., 2015), is used for better network training performance due to its distributed computation and queue management system. For each of the network architectures, we used the LeakyReLU activation function. The LeakyReLU is a refinement of the ReLU activation function which minimises the "dying ReLU" problem, and both are well-documented activation functions that have been shown to work well in deep neural networks (Anthimopoulos et al., 2016; LeCun, Bengio & Hinton, 2015; Maas, Hannun & Ng, 2013). Additionally, dropout filters were used to prevent overfitting of data (Srivastava et al., 2014)
 
-_[analysis/machinelearning](httpshttps://github.com/EdwinChanSingapore/mlmutation/tree/master/analysis/machinelearning) contains the scripts that control initialisation and training of the neural network, particularly in generatematrixesforneuralnet.py and generateresultsforneuralnet._
+_[analysis/machinelearning](https://github.com/EdwinChanSingapore/mlmutation/tree/master/analysis/machinelearning) contains the scripts that control initialisation and training of the neural network, particularly in generatematrixesforneuralnet.py and generateresultsforneuralnet._
 
 ___Bayesian Network Ranking of Mutations___
 
