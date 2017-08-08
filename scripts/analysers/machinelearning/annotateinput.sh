@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#This script is a wrapper to run annovar on a vcf file with predefined settings
+
 module load bio/annovar
 ANNOVAR_LOCATION=/data/reference/human/annovar/
 

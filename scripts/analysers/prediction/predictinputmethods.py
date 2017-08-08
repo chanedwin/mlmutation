@@ -5,14 +5,33 @@ import sys
 import matplotlib
 import vcf
 
+#declare constants and scores for probability network
+
+COMMON_SNP_SCORE = 0.4
+
+UNCOMMON_SNP_SCORE = 0.6
+
+TOTAL_NUMBER_OF_BAYESIAN_FEATURES = 6
+
+NEURAL_NETWORK_PREDICTION_NULL_VALUE = -1
+
+CLINVAR_NON_DELETERIOUS_SCORE = 0.2
+
+CLINVAR_DELETERIOUS_SCORE = 0.8
+
 matplotlib.use('Agg')
 
 from pomegranate import *
-from build_cdp import *
+from buildcdpmethods import *
 
 # generate log and constants
 LOAD_VCF_LOG = "loading annovar scores"
 VCF_FILE_NOT_FOUND = "Could not find vcf file, exiting programme"
+
+class MutationScores:
+    snp_score = 0
+    list_of_important_mutations = []
+
 
 
 def execute_main(paths):
@@ -23,7 +42,7 @@ def execute_main(paths):
     print_data_of_full_list_of_scores(full_list_of_scores)
 
 def load_vcf_object_from_input_path(paths):
-    paths = vars(paths)
+    paths = vars(paths)  #convert paths to a dictionary object
     input = paths['input']
     logging.info(LOAD_VCF_LOG)
     try:
@@ -31,10 +50,9 @@ def load_vcf_object_from_input_path(paths):
     except :
         logging.info(VCF_FILE_NOT_FOUND)
         exit()
-    name3 = input + "finalscores.txt"
-    orig_stdout = sys.stdout
-    f = file(name3 + '.txt', 'w')
-    sys.stdout = f
+    write_file_Name = input + "finalscores.txt"
+    f = file(write_file_Name, 'w')
+    sys.stdout = f         #convert file to sysout
     return opened_vcf_file
 
 def obtain_full_list_of_scores(vcf_object):
@@ -43,17 +61,27 @@ def obtain_full_list_of_scores(vcf_object):
     for record in vcf_object:
         number_of_counts += 1
         nn_prediction, list_of_scores = get_annovar_scores_of_each_record(record)
-        if not list(filter(lambda x: x != None, list_of_scores)):
+        if not list(filter(lambda x: x != None, list_of_scores)):   #if it is an empty list, throw it away
             continue
-        if record.INFO['clinvar_20150629'][0] != None:
-            list_of_scores.append(0.8)
-        else:
-            list_of_scores.append(0.2)
-        snp_present = 0.6
-        if record.INFO['snp138'][0] != None:
-            snp_present = 0.4
+        append_clinvar_scores(list_of_scores, record)        #TO-FIX make append and generate the same
+        snp_present = generate_snp_score(record)
         full_list_of_scores.append([float(nn_prediction), list_of_scores, record, snp_present])
     return full_list_of_scores
+
+
+def generate_snp_score(record):
+    snp_present = UNCOMMON_SNP_SCORE
+    if record.INFO['snp138'][0] != None:
+        snp_present = COMMON_SNP_SCORE
+    return snp_present
+
+
+def append_clinvar_scores(list_of_scores, record):
+    if record.INFO['clinvar_20150629'][0] != None:
+        list_of_scores.append(CLINVAR_DELETERIOUS_SCORE)
+    else:
+        list_of_scores.append(CLINVAR_NON_DELETERIOUS_SCORE)
+
 
 def get_annovar_scores_of_each_record(record):
     list_of_important_mutations = [record.INFO['SIFT_score'], record.INFO['LRT_score'], record.INFO['MutationAssessor_score'],
@@ -68,13 +96,13 @@ def get_annovar_scores_of_each_record(record):
     if 'NN_prediction' in record.INFO:
         NN_prediction = record.INFO['NN_prediction'][0]
     else:
-        NN_prediction = -1
+        NN_prediction = NEURAL_NETWORK_PREDICTION_NULL_VALUE
     list_of_important_mutations = map(lambda x: x[0], list_of_important_mutations)
     list_of_important_mutations = map(lambda x: None if x == None else float(x), list_of_important_mutations)
     return NN_prediction, list_of_important_mutations
 
 def normalise_scores_in_list_of_scores(full_list_of_scores):
-    for i in range(6):
+    for i in range(TOTAL_NUMBER_OF_BAYESIAN_FEATURES):
         min_num = 1000000
         max_num = -1000000
         for item in full_list_of_scores:

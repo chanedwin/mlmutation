@@ -1,5 +1,7 @@
-from ANNgeneratematrixes import *
-from ANNgenerateresults import *
+from generatematrixesforneuralnet import *
+from generateresultsforneuralnet import *
+
+#deprecated
 
 def vcf_load_references(paths):
     paths = vars(paths)

@@ -1,7 +1,15 @@
 import os
 import time
-from ANNgenerateresults import *
-from methods import *
+import argparse
+import numpy as np
+import sys
+
+import extractfeaturesfromvcf as featex
+import generateresultsforneuralnet as resgen
+import helpermethods as helper
+
+# this script builds the neural network matrixes that will be used in machine learning.
+# it extracts all the features,
 
 ### OUTPUT GOAL :1 a dictionary of lists, where the dictionary keys are mutations, and the list contains a matrix containing information of all six callers
 
@@ -16,13 +24,13 @@ from methods import *
 # vcf files should be labelled with vcf and truth file should be labelled with truth
 # no other file should be present in the folder
 
-LIST_OF_INPUTS_NAME = '/ANN/samplelist.p'
-TRUTH_DICTIONARY_NAME = '/ANN/truthdict.p'
-CALLER_LENGTH_FILE_NAME = '/ANN/callerlengths.txt'
-VCF_LIST_FILE_NAME = '/ANN/vcf_list.p'
-SCORES_NAME = '/ANN/scores.txt'
-Y_DATA_NAME = '/ANN/myydata.txt'
-X_DATA_NAME = '/ANN/myXdata.txt'
+LIST_OF_INPUTS_NAME = '/ann_data/samplelist.p'
+TRUTH_DICTIONARY_NAME = '/ann_data/truthdict.p'
+CALLER_LENGTH_FILE_NAME = '/ann_data/callerlengths.txt'
+VCF_LIST_FILE_NAME = '/ann_data/vcf_list.p'
+SCORES_NAME = '/ann_data/scores.txt'
+Y_DATA_NAME = '/ann_data/myydata.txt'
+X_DATA_NAME = '/ann_data/myXdata.txt'
 NUMBER_OF_CALLERS = 5
 negative_sample_ratio = 1
 positive_sample_ratio = 2
@@ -33,21 +41,18 @@ number_of_callers = 5
 # This method take in the user input, and loads it into local variables. It executes the main_analyse_samples file
 # It then saves files into a directory determined by the final variables
 
-def load_and_save_data(user_input):
-    user_input = vars(user_input)
+def execute_main(user_input):
     input_samples, referencepath, output_location = load_references(user_input)
     my_x_dataset, my_y_dataset, list_of_samples, truth_dictionary, length_of_caller_outputs, \
     vcf_record_list = main_analyse_samples_and_truth(input_samples, referencepath)
     save_files(output_location, my_x_dataset, length_of_caller_outputs,
-               list_of_samples, truth_dictionary, vcf_record_list, my_y_dataset)
+           list_of_samples, truth_dictionary, vcf_record_list, my_y_dataset)
     orig_stdout = sys.stdout
     f = file(str(output_location) + SCORES_NAME, 'w')
     sys.stdout = f
-    main_gather_input_execute_prep_output(length_of_caller_outputs, truth_dictionary, my_x_dataset, my_y_dataset,
-                                          list_of_samples, output_location, vcf_record_list)
-
-
-# This method is the main method. It first prepares a dictionary of truth to be checked against. It then initialises
+    resgen.main_gather_input_execute_prep_output(length_of_caller_outputs, truth_dictionary, my_x_dataset, my_y_dataset,
+                                      list_of_samples, output_location,
+                                      vcf_record_list)  # This method is the main method. It first prepares a dictionary of truth to be checked against. It then initialises
 # a dictionary of samples with all the keys, each key being a variant call, and then fills it up each key with data
 # subsequently, it removes dictionary entries that are the wrong size, and then checks whether
 # each entry in the dictionary is actually true or not.
@@ -58,11 +63,8 @@ def load_and_save_data(user_input):
 def main_analyse_samples_and_truth(path, referencepath):
     os.chdir(path)
     truthdict = generate_truth_list(path)
-    print "truth dictionary generated at time :", time.time() - start
     callerlengths, list_of_called_samples, vcf_list = generate_input(path, referencepath)
-    print "samples generated at time :", time.time() - start
     clean_truth_array, cleaned_sample_array = check_predicted_with_truth(list_of_called_samples, truthdict)
-    print "samples checked with truth at time :", time.time() - start
     cleaned_sample_array = np.array(cleaned_sample_array, np.float64)
     clean_truth_array = np.array(clean_truth_array)
     return cleaned_sample_array, clean_truth_array, list_of_called_samples, truthdict, callerlengths, vcf_list
@@ -70,7 +72,7 @@ def main_analyse_samples_and_truth(path, referencepath):
 
 def generate_input(path, referencepath):
     reference_dictionary = get_reference_dictionary_for_entropy(referencepath)
-    base_entropy = get_ref_entropy(referencepath)
+    base_entropy = featex.get_ref_entropy(referencepath)
     full_dictionary = get_dictionary_keys(path)
     list_of_called_samples, callerlengths, vcf_list = fill_sample_dictionary(base_entropy, full_dictionary, path,
                                                                              reference_dictionary)
@@ -113,7 +115,6 @@ def create_list_of_paths(path):
     return list_of_paths
 
 
-
 def fill_sample_dictionary(base_entropy, sample_dictionary, path, reference_dictionary):
     callerlengths = [0] * number_of_callers
     index = 0
@@ -148,13 +149,13 @@ def refill_dictionary_with_zero_arrays_for_each_file(full_dictionary, index, len
 # this method iterates through all the files to extract data from each sample. It uses methods from the
 # methods.py function, which parses each record for data.
 
-def iterate_over_file_to_extract_data(base_entropy, sample_dictionary, recorddictionary, vcf_reader1, vcf_file):
+def iterate_over_file_to_extract_data(base_entropy, sample_dictionary, reference_dictionary, vcf_reader1, vcf_file):
     removaldict = {}
     for record in vcf_reader1:
         if "GL" in str(record.CHROM):
             continue
         sample_name = get_sample_name_from_record(record)
-        sample_data = getallvalues(record, recorddictionary, base_entropy, vcf_file)
+        sample_data = featex.getallvalues(record, reference_dictionary, base_entropy, vcf_file)
         sample_dictionary[sample_name][0].append(sample_data)
         sample_dictionary[sample_name][1] = record
         create_removal_dict(sample_data, removaldict)
@@ -245,10 +246,11 @@ def check_sample_against_truth_dictionary(tuple_name, final_truth_list, truth_di
 
 
 def load_references(user_input):
-    file1 = user_input['input'][0]
-    referencepath = user_input['reference']
+    user_input = vars(user_input)
+    loaded_file_location = user_input['input'][0]
+    reference_location = user_input['reference']
     output_location = user_input['output']
-    return file1, referencepath, output_location
+    return loaded_file_location, reference_location, output_location
 
 
 def save_files(output_location, x_array, length_of_caller_outputs, sample_list, truth_dict, vcf_dictionary_file,
@@ -274,19 +276,26 @@ def save_files(output_location, x_array, length_of_caller_outputs, sample_list, 
         np.save(y_data_file_name, y_array)
 
 
-def check_predicted_with_truth(passed_list_of_samples, dictionary_of_truth=[]):
+def check_predicted_with_truth(passed_list_of_samples, truth_dictionary=[]):
     final_array_of_samples = []
     final_truth_list = []
     for item in passed_list_of_samples:
-        if dictionary_of_truth:
-            check_sample_against_truth_dictionary(item[0], final_truth_list, dictionary_of_truth)
+        if truth_dictionary:
+            add_item_to_array_based_on_presence_in_dictionary(item, truth_dictionary, final_truth_list)
         temp_array = []
         for row in item[1]:
             temp_array.extend(row)
         final_array_of_samples.append(temp_array)
-    if dictionary_of_truth:
+    if truth_dictionary:
         return final_truth_list, final_array_of_samples
     return final_array_of_samples
+
+
+def add_item_to_array_based_on_presence_in_dictionary(item, dictionary_of_truth, final_truth_list):
+    if helper.is_vcf_record_in_dictionary(item[0], dictionary_of_truth):
+        final_truth_list.append(1)
+    else:
+        final_truth_list.append(0)
 
 
 def add_mode_values_into_list_of_samples(full_dictionary, mode_value):
@@ -339,4 +348,4 @@ if __name__ == "__main__":
     parser.add_argument('-o', '--output', help="")
     paths = parser.parse_args()
     start = time.time()
-    load_and_save_data(paths)
+    execute_main(paths)

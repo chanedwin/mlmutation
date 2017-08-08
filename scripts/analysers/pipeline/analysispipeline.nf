@@ -1,4 +1,4 @@
-#!/usr/bin/env nextflow
+!/usr/bin/env nextflow
 
 home = '/data/backup/metacaller/stage'
 project ='na_version_1.0_2.4/ann'

@@ -1,5 +1,5 @@
-from ANNgeneratematrixes import *
-from ANNgenerateresults import *
+from generatematrixesforneuralnet import *
+from generateresultsforneuralnet import *
 
 def vcf_load_references(paths):
     paths = vars(paths)
@@ -38,7 +38,7 @@ def execute_main(paths):
 
 def fill_negative_samples(array_of_predicted, array_of_truth, dict_of_samples, list_of_truth):
     for item in list_of_truth:
-        fillnegative(item, dict_of_samples, array_of_predicted, array_of_truth)
+        add_sample_to_array_if_not_in_dictionary(item, dict_of_samples, array_of_predicted, array_of_truth)
 
 
 def restructure_data(actual_predictions, final_array_of_samples, final_truth_list, generated_truth_dictionary):

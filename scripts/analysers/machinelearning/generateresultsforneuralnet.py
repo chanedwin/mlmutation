@@ -1,6 +1,7 @@
 import argparse
 import cPickle as pickle
 import sys
+import helpermethods as helper
 
 import numpy as np
 import vcf
@@ -210,7 +211,7 @@ def add_negative_data(list_of_samples, dict_of_truth, array_of_predicted, array_
     new_array_of_truth = list(array_of_truth)
     original_length = len(new_array_of_predicted)
     for item in list_of_truth:
-        fillnegative(item, dict_of_samples, new_array_of_predicted, new_array_of_truth)
+        add_sample_to_array_if_not_in_dictionary(item, dict_of_samples, new_array_of_predicted, new_array_of_truth)
     print "number of false data samples are", (len(new_array_of_predicted) - original_length)
     return new_array_of_predicted, new_array_of_truth
 
@@ -282,14 +283,10 @@ def perf_measure(y_actual, y_hat):
     return false_positive_rate, true_negative_rate
 
 
-def fillnegative(tuple1, sampledict, arrayofsamples, arrayoftruths):
-    tuple2 = (tuple1[0], tuple1[1], tuple1[2])
-    if tuple2 in sampledict:
-        for ALT in tuple1[3]:
-            if ALT in sampledict[tuple2]:
-                return
-    arrayofsamples.append(0)
-    arrayoftruths.append(1)
+def add_sample_to_array_if_not_in_dictionary(sample_tuple, sample_dictionary, arrayofsamples, arrayoftruths):
+    if not helper.is_vcf_record_in_dictionary(sample_tuple, sample_dictionary):
+        arrayofsamples.append(0)
+        arrayoftruths.append(1)
 
 
 def train_neural_net(mybatch_size, mynb_epoch, myX_train, myy_train, location, array_sizes):

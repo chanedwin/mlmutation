@@ -1,4 +1,9 @@
-from CreateConcordance import *
+from createconcordancemethods import *
+
+
+#deprecated
+
+
 
 def execute_main(paths):
     concordnumber, inputpaths, output_path = load_references_create(paths)

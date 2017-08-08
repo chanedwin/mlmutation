@@ -3,6 +3,9 @@ import argparse
 import numpy as np
 from sklearn.metrics import *
 
+#python wrapper script that takes in 2 vcf files, one vcf files of predicted mutations and another ground truth
+#and calculates the percentage of files that were falsely
+
 parser = argparse.ArgumentParser(description="train neural net")
 parser.add_argument('-p', '--predict', help="give directories with files")
 parser.add_argument('-t', '--truth', help="give directories with files")
@@ -14,12 +17,6 @@ truthinput = paths['truth']
 predictarray = np.load(predictinput)
 trutharray = np.load(truthinput)
 newpredictarray = []
-
-print list(predictarray)[:1000]
-print list(trutharray)[:1000]
-
-print predictarray.shape
-print trutharray.shape
 
 print recall_score(predictarray, trutharray)
 print precision_score(predictarray, trutharray)
