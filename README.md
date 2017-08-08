@@ -17,7 +17,7 @@ Further documentation about this software can be found [***here***](https://gith
 
 ## Simulator Software
 
-Simulator software refers to the software used to generate simulated datasets for analysis, which is very useful as we can generate ground truths by perturbing known datasets.
+Simulator software refers to the software used to generate simulated datasets for analysis, which enables us to generate ground truths mutations by perturbing known reference genomic datasets. This overcomes the difficulities of establishing ground truth mutations in real datasets, and serves as a preliminary source of data for neural network optimisation.
 
 
 ___Pipelining Using NextFlow___
