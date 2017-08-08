@@ -5,7 +5,7 @@ Variant Calling and Ranking Software
 ***Warning : This software is in development without proper build and configuration tools***
 
 
-1. Software Description : 
+###Software Description :
 
 The advent of next-generation sequencing technology has enabled large-scale interrogation of the genome to identify variants in patient samples. The accurate identification of functional variants can provide critical insights into the disease process to guide diagnosis and treatment. However, the use of clinical genomics remains limited as (i) the accurate identification of variants remains suboptimal, and (ii) the large number of variants identified may be difficult to interpret without a systematic approach of ranking by functional importance.
 Here, we describe the development of a software platform analysing vcf files that implements a deep learning neural network to improve the accuracy of variant-calling, and a Bayesian classification method for the probabilistic ranking of functionally relevant genes.
@@ -13,12 +13,9 @@ Here, we describe the development of a software platform analysing vcf files tha
 
 Further documentation about this software can be found [***here***](https://github.com/EdwinChanSingapore/mlmutation/blob/master/docs/edwin_chan_thesis_2017.pdf).
 
-2. Software Components : 
+###2. Software Components : 
 
-Two main computational pipelines were built : (i) a training pipeline for training and the optimisation of the neural network, and (ii) an analysis pipeline that uses a trained neural network to perform variant prediction and validation (Figure 6). In the training pipeline, training datasets from synthetic and real sequencing data were used for performing the processing steps of alignment, variant calling and training of the deep learning network. Briefly, FASTQ sequence reads are first mapped to the reference genome before variant calling is performed using an ensemble of callers. The different variant callers are used to generate the feature vectors that served as the input for the deep learning network. The predictions by the neural network are compared to the ground truth variant calls to train the network to predict high confidence variants.
-
-In the analysis pipeline, the trained and optimised network from the training pipeline is then used to predict high-confidence variant calls in naive samples without ground truth variant calls. In brief, the FASTQ sequence reads are aligned and variant calling performed in a similar fashion as in the training pipeline. The feature vectors from the ensemble of callers is used to predict high confidence calls using the trained and optimised deep learning network.
-Finally, Bayesian network analysis is used to rank the functionally important variants/mutations from the high confidence calls identified from naive samples in the analysis pipeline.
+Two main computational pipelines were built : (i) a training pipeline for training and the optimisation of the neural network, and (ii) an analysis pipeline that uses a trained neural network to perform variant prediction and validation (Figure 6). In the training pipeline, training datasets from synthetic and real sequencing data were used for performing the processing steps of alignment, variant calling and training of the deep learning network. In the analysis pipeline, the trained and optimised network from the training pipeline is then used to predict high-confidence variant calls in naive samples without ground truth variant calls. Finally, Bayesian network analysis is used to rank the functionally important variants/mutations from the high confidence calls identified from naive samples in the analysis pipeline.
 
 <img src="docs/trainingpathway.png" width="400">
 
