@@ -15,12 +15,6 @@ Further documentation about this software can be found [***here***](https://gith
 
 ## Software Components 
 
-Two main computational pipelines are built : (i) a training pipeline for training and the optimisation of the neural network, and (ii) an analysis pipeline that uses a trained neural network to perform variant prediction and validation (Figure 6). 
-
-<img src="docs/trainingpathway.png" width="400">
-
-In the training pipeline, training datasets from synthetic and real sequencing data were used for performing the processing steps of alignment, variant calling and training of the deep learning network. In the analysis pipeline, the trained and optimised network from the training pipeline is then used to predict high-confidence variant calls in naive samples without ground truth variant calls. Finally, Bayesian network analysis is used to rank the functionally important variants/mutations from the high confidence calls identified from naive samples in the analysis pipeline.
-
 ## Simulator Software
 
 Simulator software refers to the software used to generate simulated datasets for analysis, which is very useful as we can generate ground truths by perturbing known datasets.
@@ -68,7 +62,12 @@ For the Bayesian ranking of mutations, the high confidence calls from the deep l
 
 [analysis/prediction](https://github.com/EdwinChanSingapore/mlmutation/tree/master/analysis/prediction) contains the scripts that build the bayesian ranking network and the accompany graphs and networks.
 
+## Overall Pipeline
 
+Two main computational pipelines are present in this software : (i) a training pipeline for training and the optimisation of the neural network, and (ii) an analysis pipeline that uses a trained neural network to perform variant prediction and validation (See Below). 
 
+<img src="docs/trainingpathway.png" width="400">
+
+In the training pipeline, training datasets from synthetic and real sequencing data were used for performing the processing steps of alignment, variant calling and training of the deep learning network. In the analysis pipeline, the trained and optimised network from the training pipeline is then used to predict high-confidence variant calls in naive samples without ground truth variant calls. Finally, Bayesian network analysis is used to rank the functionally important variants/mutations from the high confidence calls identified from naive samples in the analysis pipeline.
 
 Main documentation about this software can be found in the Introduction/Materials and Methods of [***here***](https://github.com/EdwinChanSingapore/mlmutation/blob/master/docs/edwin_chan_thesis_2017.pdf).
