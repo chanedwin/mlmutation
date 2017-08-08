@@ -5,7 +5,7 @@
 _Warning : This software is still in development without proper build and configuration tools._
 
 
-## Software Description :
+## Software Description 
 
 The advent of next-generation sequencing technology has enabled large-scale interrogation of the genome to identify variants in patient samples. The accurate identification of functional variants can provide critical insights into the disease process to guide diagnosis and treatment. However, the use of clinical genomics remains limited as (i) the accurate identification of variants remains suboptimal, and (ii) the large number of variants identified may be difficult to interpret without a systematic approach of ranking by functional importance.
 Here, we describe the development of a software platform analysing variant call data that implements a deep learning neural network to improve the accuracy of variant-calling, and a Bayesian classification method for the probabilistic ranking of functionally relevant genes.
@@ -13,7 +13,7 @@ Here, we describe the development of a software platform analysing variant call 
 
 Further documentation about this software can be found [***here***](https://github.com/EdwinChanSingapore/mlmutation/blob/master/docs/edwin_chan_thesis_2017.pdf).
 
-## Software Components : 
+## Software Components 
 
 Two main computational pipelines are built : (i) a training pipeline for training and the optimisation of the neural network, and (ii) an analysis pipeline that uses a trained neural network to perform variant prediction and validation (Figure 6). 
 
