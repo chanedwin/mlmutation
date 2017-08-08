@@ -1,40 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="f9a773ed-46a4-4211-aaaf-8c0cc6732d6f" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/analysers/test/__init__.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/analysers/test/test_extract_features_from_vcf.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/analysers/test/testcomparisonpython.py" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/analysers/slave/ANNgeneratematrixes_for_roc.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/analysers/slave/analyse_input.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/analysers/slave/tests.py" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/scripts/analysers/control/ANNwrapper.sh" afterPath="$PROJECT_DIR$/scripts/analysers/pipeline/annwrapper.sh" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/scripts/analysers/control/CALwrapper.sh" afterPath="$PROJECT_DIR$/scripts/analysers/pipeline/calwrapper.sh" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/scripts/analysers/control/analysispipeline.nf" afterPath="$PROJECT_DIR$/scripts/analysers/pipeline/analysispipeline.nf" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/scripts/analysers/control/analysiswrapper.sh" afterPath="$PROJECT_DIR$/scripts/analysers/pipeline/analysiswrapper.sh" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/scripts/analysers/control/concordancewrapper.sh" afterPath="$PROJECT_DIR$/scripts/analysers/pipeline/concordancewrapper.sh" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/scripts/analysers/control/keraspipelineneuralnet.nf" afterPath="$PROJECT_DIR$/scripts/analysers/pipeline/keraspipelineneuralnet.nf" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/scripts/analysers/control/lastworkingversionlocations.txt" afterPath="$PROJECT_DIR$/scripts/analysers/pipeline/lastworkingversionlocations.txt" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/scripts/analysers/control/manualCAL.sh" afterPath="$PROJECT_DIR$/scripts/analysers/pipeline/manualCAL.sh" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/scripts/analysers/control/nextflow.config" afterPath="$PROJECT_DIR$/scripts/analysers/pipeline/nextflow.config" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/scripts/analysers/prediction/build_cdp.py" afterPath="$PROJECT_DIR$/scripts/analysers/prediction/buildcdpmethods.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/scripts/analysers/prediction/predict_input.py" afterPath="$PROJECT_DIR$/scripts/analysers/prediction/predictinputmethods.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/scripts/analysers/slave/ANNgeneratematrixes.py" afterPath="$PROJECT_DIR$/scripts/analysers/machinelearning/generatematrixesforneuralnet.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/scripts/analysers/slave/ANNgenerateresults.py" afterPath="$PROJECT_DIR$/scripts/analysers/machinelearning/generateresultsforneuralnet.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/scripts/analysers/slave/CalculateF1.py" afterPath="$PROJECT_DIR$/scripts/analysers/machinelearning/calculatef1.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/scripts/analysers/slave/CreateConcordance.py" afterPath="$PROJECT_DIR$/scripts/analysers/machinelearning/createconcordancemethods.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/scripts/analysers/slave/__init__.py" afterPath="$PROJECT_DIR$/scripts/__init__.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/scripts/analysers/slave/annotate_input.sh" afterPath="$PROJECT_DIR$/scripts/analysers/machinelearning/annotateinput.sh" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/scripts/analysers/slave/basic_visualisation.py" afterPath="$PROJECT_DIR$/scripts/analysers/machinelearning/basicvisualisation.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/scripts/analysers/slave/compare_two_vcf.py" afterPath="$PROJECT_DIR$/scripts/analysers/machinelearning/comparetwovcfbyf1score.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/scripts/analysers/slave/create_concordance_vcf.py" afterPath="$PROJECT_DIR$/scripts/analysers/machinelearning/createconcordancemain.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/scripts/analysers/slave/get_false_positives_and_true_negatives.py" afterPath="$PROJECT_DIR$/scripts/analysers/machinelearning/getfalsepositivesandtruenegatives.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/scripts/analysers/slave/methods.py" afterPath="$PROJECT_DIR$/scripts/analysers/machinelearning/extractfeaturesfromvcf.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/scripts/analysers/slave/roc_curve_writer.py" afterPath="$PROJECT_DIR$/scripts/analysers/machinelearning/roccurvewriter.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/scripts/analysers/truth_statistics_viewer.py" afterPath="$PROJECT_DIR$/scripts/analysers/prediction/truthstatisticsviewer.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test/trialtest.py" afterPath="$PROJECT_DIR$/scripts/analysers/machinelearning/helpermethods.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-    </list>
+    <list default="true" id="f9a773ed-46a4-4211-aaaf-8c0cc6732d6f" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -246,20 +213,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="mlmutation" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mlmutation" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mlmutation" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="scripts" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
