@@ -17,8 +17,18 @@ Further documentation about this software can be found [***here***](https://gith
 
 ## Simulator Software
 
-Simulator software refers to the software used to generate simulated datasets for analysis, which enables us to generate ground truths mutations by perturbing known reference genomic datasets. This overcomes the difficulities of establishing ground truth mutations in real datasets, and serves as a preliminary source of data for neural network optimisation.
+Simulator software refers to the software used to generate simulated datasets for analysis, which enables us to generate ground truths mutations by perturbing known reference genomic datasets. This overcomes the difficulities of establishing ground truth mutations in real datasets, and serves as a preliminary source of data for neural network optimisation. Mason, a genome mutation software written in C++ (v2.3.1), is used to simulate sequence reads with known error rates and ground truth variants. Default error rates (indel and substitution rates) use published data from Schirmer et al. (2016).
 
+_[simulators/scripts](https://github.com/EdwinChanSingapore/mlmutation/tree/master/simulators/scripts) contains the base scripts that control the running of the simulator software._
+
+## Variant Caller Software
+
+
+___Variant Calling and Alignment___
+
+Variant Callers are bioinformatics tools used to call mutations, which are specific genomic differences between a sample genome and a reference genome. However, individual variant callers suffer from having low concordances, and have high false positive rates. Here, we aggregate the data from five different variant callers to update and inform our deep learning network. The software used for variant calling are : FreeBayes (v1.0.2-16); GATK Haplotype Caller (v3.7-0) and Unified Genotyper (v3.7-0); Samtools (v1.3.1); Pindel (v2.3.0) (Garrison & Marth, 2012; McKenna et al. 2010, DePristo et al. 2011; Li H, et al., 2009; Ye et al., 2009). 
+
+_[simulators/scripts](https://github.com/EdwinChanSingapore/mlmutation/tree/master/simulators/scripts) contains the base scripts that control the running of the variant calling software, as well as the options used to run the variant callers._
 
 ___Pipelining Using NextFlow___
 
@@ -27,19 +37,9 @@ The workflows in the training and analysis pipelines are managed using NextFlow 
 _[simulators/pipelines](https://github.com/EdwinChanSingapore/mlmutation/tree/master/simulators/pipeline) contains all the pipelining software written in nextflow to automate simulator and variant calling processes._
 
 
-
-___Variant Calling and Alignment___
-
-The sequence reads (FASTQ) from synthetic or real datasets are first aligned to the hg19 human reference genome using BWA (0.7.13) (Li, 2013) using the default settings. Following alignment, the alignment files (BAM) are used for variant calling with the following callers with their default settings: FreeBayes (v1.0.2-16); GATK Haplotype Caller (v3.7-0) and Unified Genotyper (v3.7-0); Samtools (v1.3.1); Pindel (v2.3.0) (Garrison & Marth, 2012; McKenna et al. 2010, DePristo et al. 2011; Li H, et al., 2009; Ye et al., 2009). 
-
-_[simulators/scripts](https://github.com/EdwinChanSingapore/mlmutation/tree/master/simulators/scripts) contains the base scripts that control the running of the variant calling software, as well as the options used to run the variant callers._
-
-
-
-
 ## Analysis, Machine Learning and Ranking Software
 
-The analysis software contain the feature extraction and engineering component that generates features from the vcf entries, the deep learning component that initialises the machine learning network and trains it, and finally the Bayesian graphing component that performs Bayesian updating to rank the mutations in terms of importance using annotations from ANNOVAR.
+The analysis software contain the feature extraction and engineering component that generates features from the vcf entries, the deep learning component that initialises the machine learning network and trains it, and finally the Bayesian graphing component that performs Bayesian updating to rank the mutations in terms of importance using annotations from ANNOVAR. By integrating information of all five callers into a neural network, we allow the network to use features of each variant call to predict whether a mutation is true or not. Our research shows that there is a [significant difference in using such a neural network to analyse if mutations are true](https://github.com/EdwinChanSingapore/mlmutation/blob/master/docs/edwin_chan_thesis_2017.pdf). Subsequently, ranking the mutations allows us to provide clinicians with a set of most important mutations that they can focus on.
 
 
 ___Preprocessing and Analysis___
