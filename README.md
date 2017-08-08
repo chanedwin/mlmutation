@@ -25,11 +25,13 @@ In the training pipeline, training datasets from synthetic and real sequencing d
 
 Simulator software refers to the software used to generate simulated datasets for analysis, which is very useful as we can generate ground truths by perturbing known datasets.
 
+
 ___Pipelining Using NextFlow___
 
 The workflows in the training and analysis pipelines are managed using NextFlow (v0.21.3.3990), a Groovy based Domain Specific Language (DSL) that provides easy management of parallel pipelines consisting of dependent tasks organised as a directed acyclic graph (Tommaso et al., 2014). Nextflow was used to manage and coordinate the different steps in the pipelines to ensure reproducibility and scalability.
 
 _[simulators/pipelines](https://github.com/EdwinChanSingapore/mlmutation/tree/master/simulators/pipeline) contains all the pipelining software written in nextflow to automate simulator and variant calling processes._
+
 
 
 ___Variant Calling and Alignment___
@@ -39,9 +41,12 @@ The sequence reads (FASTQ) from synthetic or real datasets are first aligned to 
 _[simulators/scripts](https://github.com/EdwinChanSingapore/mlmutation/tree/master/simulators/scripts) contains the base scripts that control the running of the variant calling software, as well as the options used to run the variant callers._
 
 
+
+
 ## Analysis, Machine Learning and Ranking Software
 
 The analysis software contain the feature extraction and engineering component that generates features from the vcf entries, the deep learning component that initialises the machine learning network and trains it, and finally the Bayesian graphing component that performs Bayesian updating to rank the mutations in terms of importance using annotations from ANNOVAR.
+
 
 ___Preprocessing and Analysis___
 
@@ -49,17 +54,21 @@ The preprocessing and analytical components are implemented using Python (v2.7) 
 
 _[analysis/machinelearning](https://github.com/EdwinChanSingapore/mlmutation/tree/master/analysis/machinelearning) contains the extraction of features from the vcf files, mainly with the methods found in extractfeaturesfromvcf.py._
 
+
 ___Deep Learning Networks___
 
 Deep learning networks are implemented using the Keras library (v1.1.1) with a TensorFlow backend (v0.11.0). TensorFlow, from Google (Abadi et al., 2015), is used for better network training performance due to its distributed computation and queue management system. For each of the network architectures, we used the LeakyReLU activation function. The LeakyReLU is a refinement of the ReLU activation function which minimises the "dying ReLU" problem, and both are well-documented activation functions that have been shown to work well in deep neural networks (Anthimopoulos et al., 2016; LeCun, Bengio & Hinton, 2015; Maas, Hannun & Ng, 2013). Additionally, dropout filters were used to prevent overfitting of data (Srivastava et al., 2014)
 
 _[analysis/machinelearning](https://github.com/EdwinChanSingapore/mlmutation/tree/master/analysis/machinelearning) contains the scripts that control initialisation and training of the neural network, particularly in generatematrixesforneuralnet.py and generateresultsforneuralnet._
 
+
 ___Bayesian Network Ranking of Mutations___
 
 For the Bayesian ranking of mutations, the high confidence calls from the deep learning network are annotated using ANNOVAR (v2015Jun17) (Wang, Li, & Hakonarson, 2010). The annotated features for each variant are used as inputs to the Bayesian network, which was implemented using Pomegranate (v0.6.1), a Python library for Bayesian analysis. 
 
 [analysis/prediction](https://github.com/EdwinChanSingapore/mlmutation/tree/master/analysis/prediction) contains the scripts that build the bayesian ranking network and the accompany graphs and networks.
+
+
 
 
 Main documentation about this software can be found in the Introduction/Materials and Methods of [***here***](https://github.com/EdwinChanSingapore/mlmutation/blob/master/docs/edwin_chan_thesis_2017.pdf).
