@@ -13,7 +13,7 @@ Here, we describe the development of a deep learning neural network to improve t
 2. Software Components : 
 <<<<<<< HEAD
 
-<img src="docs/trainingpathway.png" alt="alt text" width="500x" height="1000x">
+<img src="docs/trainingpathway.png" alt="alt text" width="500x" height="800x">
 
 ___Pipelining Using NextFlow___
 The workflows in the training and analysis pipelines were managed using NextFlow (v0.21.3.3990), a Groovy based Domain Specific Language (DSL) that provides easy management of parallel pipelines consisting of dependent tasks organised as a directed acyclic graph (Tommaso et al., 2014). Nextflow was used to manage and coordinate the different steps in the pipelines to ensure reproducibility and scalability.
