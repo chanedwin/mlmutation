@@ -17,12 +17,12 @@ Explanation of what this software was used to do can be found in [***the paper h
 
 ## Analysis, Machine Learning and Ranking 
 
-The analysis software contain the feature extraction and engineering component that generates features from the vcf entries, the deep learning component that initialises the machine learning network and trains it using extracted features, and finally the Bayesian graphing component that performs Bayesian updating to rank the mutations in terms of importance using annotations from ANNOVAR. By integrating information of all five callers into a neural network, we allow the network to use features of each variant call to predict whether a mutation is true or not. Our research shows that there is a significant difference in using such a neural network to analyse if mutations are true ([see paper](https://github.com/EdwinChanSingapore/mlmutation/blob/master/docs/edwin_chan_thesis_2017.pdf)). Subsequently, ranking the mutations allows us to provide clinicians with a set of most important mutations that they can focus on.
+The analysis software contain the feature extraction and engineering component that generates features from vcf data, the deep learning component that initialises the machine learning network and trains it using extracted features, and finally the Bayesian graphing component that performs Bayesian updating to rank the mutations in terms of importance using annotations from ANNOVAR. By integrating information of all five callers into a neural network, we allow the network to use features of each variant call to predict the probability of mutation being true. Our research shows that there is a significant difference in using such a neural network to analyse if mutations are true ([see paper](https://github.com/EdwinChanSingapore/mlmutation/blob/master/docs/edwin_chan_thesis_2017.pdf)). Subsequently, ranking the mutations allows us to provide clinicians with a set of most important mutations that they can focus on.
 
 
 ___Preprocessing and Analysis___
 
-The preprocessing and analytical components are implemented using Python (v2.7) (Van Rossum, 2007) and the following Python libraries: NumPy, scikit-Learn, Pomegranate and PyVCF. Briefly, NumPy (v1.11.3) was used to prepare feature vectors for deep learning training, scikit-learn (v0.18.1) was used to perform Principal Component Analysis (PCA) and Synthetic Minority Oversampling Technique (SMOTE) methods (See Appendix 5.3.3 for details). PyVCF (v0.6.8) was used to parse the VCF files to facilitate the comparison of variants efficiently in O(1) time using hash-based dictionary lookups. 
+The preprocessing and analytical components are implemented using Python 2.7 (Van Rossum, 2007) and the following Python libraries: NumPy, scikit-Learn, Pomegranate and PyVCF. Briefly, NumPy (v1.11.3) is used to prepare feature vectors for deep learning training, scikit-learn (v0.18.1) is used to perform Principal Component Analysis (PCA) and Synthetic Minority Oversampling Technique (SMOTE) methods (See Appendix 5.3.3 for details). PyVCF (v0.6.8) is used to parse the VCF files to facilitate the comparison of variants efficiently in O(1) time using hash-based dictionary lookups. 
 
 _[analysis/machinelearning](https://github.com/EdwinChanSingapore/mlmutation/tree/master/analysis/machinelearning) contains the extraction of features from the vcf files, mainly with the methods found in extractfeaturesfromvcf.py._
 
@@ -31,7 +31,7 @@ ___Deep Learning Networks___
 
 Deep learning networks are implemented using the Keras library (v1.1.1) with a TensorFlow backend (v0.11.0). TensorFlow, from Google (Abadi et al., 2015), is used for better network training performance due to its distributed computation and queue management system. These network learn from features extracted from the VCF file (see [paper](https://github.com/EdwinChanSingapore/mlmutation/blob/master/docs/edwin_chan_thesis_2017.pdf) section 2.7 for more details on feature extraction), and are used to create a likelihood probability of the mutation being true.
 
-_[analysis/machinelearning](https://github.com/EdwinChanSingapore/mlmutation/tree/master/analysis/machinelearning) contains the scripts that control initialisation and training of the neural network, particularly in generatematrixesforneuralnet.py and generateresultsforneuralnet._
+_[analysis/machinelearning](https://github.com/EdwinChanSingapore/mlmutation/tree/master/analysis/machinelearning) contains the scripts that control initialisation and training of the neural network, particularly in generatematrixesforneuralnet.py and generateresultsforneuralnet scripts._
 
 
 ___Bayesian Network Ranking of Mutations___
