@@ -2,7 +2,7 @@
 # Variant Calling and Ranking Software
 
 
-_Warning : This software is still in development without proper build and configuration tools._
+_This software is still in development without proper build and configuration tools._
 
 
 ## Software Description 
