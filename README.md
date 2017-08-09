@@ -15,7 +15,7 @@ Explanation of what this software was used to do can be found in [***the paper h
 
 ## Components 
 
-## Analysis, Machine Learning and Ranking Software
+## Analysis, Machine Learning and Ranking 
 
 The analysis software contain the feature extraction and engineering component that generates features from the vcf entries, the deep learning component that initialises the machine learning network and trains it using extracted features, and finally the Bayesian graphing component that performs Bayesian updating to rank the mutations in terms of importance using annotations from ANNOVAR. By integrating information of all five callers into a neural network, we allow the network to use features of each variant call to predict whether a mutation is true or not. Our research shows that there is a [significant difference in using such a neural network to analyse if mutations are true](https://github.com/EdwinChanSingapore/mlmutation/blob/master/docs/edwin_chan_thesis_2017.pdf). Subsequently, ranking the mutations allows us to provide clinicians with a set of most important mutations that they can focus on.
 
@@ -40,7 +40,7 @@ For the Bayesian ranking of mutations, the high confidence calls from the deep l
 
 [analysis/prediction](https://github.com/EdwinChanSingapore/mlmutation/tree/master/analysis/prediction) contains the scripts that build the bayesian ranking network and the accompany graphs and networks.
 
-## Simulator Software
+## Simulator 
 
 Simulator software refers to the software used to generate simulated datasets for analysis, which enables us to generate ground truths mutations by perturbing known reference genomic datasets. This overcomes the difficulities of establishing ground truth mutations in real datasets, and serves as a preliminary source of data for neural network optimisation. Mason, a genome mutation software written in C++ (v2.3.1), is used to simulate sequence reads with known error rates and ground truth variants. Default error rates (indel and substitution rates) use published data from Schirmer et al. (2016).
 
