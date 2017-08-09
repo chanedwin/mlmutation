@@ -42,7 +42,7 @@ For the Bayesian ranking of mutations, the high confidence calls from the deep l
 
 ## Simulator 
 
-Simulator software refers to the software used to generate simulated datasets for analysis, which enables us to generate ground truths mutations by perturbing known reference genomic datasets. This overcomes the difficulities of establishing ground truth mutations in real datasets, and serves as a preliminary source of data for neural network optimisation. Mason, a genome mutation software written in C++ (v2.3.1), is used to simulate sequence reads with known error rates and ground truth variants. Default error rates (indel and substitution rates) use published data from Schirmer et al. (2016).
+Simulators allow the generation of simulated datasets for analysis, which enables us to create known ground truths mutations by perturbing reference genomic datasets. This overcomes the difficulities of establishing ground truth mutations in real datasets, and serves as a preliminary source of data for neural network optimisation. Mason, a genome mutation software written in C++ (v2.3.1), is used to simulate sequence reads with known error rates and ground truth variants. Default error rates (indel and substitution rates) use published data from Schirmer et al. (2016).
 
 _[simulators/scripts](https://github.com/EdwinChanSingapore/mlmutation/tree/master/simulators/scripts) contains the base scripts that control the running of the simulator software._
 
