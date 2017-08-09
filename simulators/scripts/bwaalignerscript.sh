@@ -1,8 +1,8 @@
 #!/bin/bash
 ###PRESTEP - Varsim
 ###POSTSTEP - fullanalysis
-###After using Varsim to create lanes of variants, this method aligns the variants using BWA mem algorithm (paired end manner). it also sorts the sam file by chromosome, converts it into a bam file and piles up all bamfiles in a region. It then indexes the piled up bam file
-###MUST ENSURE THAT REFPATH IS ALREADY INDEXED ELSE INDEX WITH BWA - else do the commented method
+# After using Varsim to create lanes of variants, this method aligns the variants using BWA mem algorithm (paired end manner). it also sorts the sam file by chromosome, converts it into a bam file and piles up all bamfiles in a region. It then indexes the piled up bam file
+# MUST ENSURE THAT REFPATH IS ALREADY INDEXED WITH BWA
 
 BWAPATH=/data/backup/metacaller/download/bwa-0.7.13/bwa
 REFPATH=$3

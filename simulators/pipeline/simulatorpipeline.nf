@@ -1,5 +1,9 @@
 #!/usr/bin/env nextflow
 
+#this is a nextflow pipeline that simulates a genome sequence (using mason), aligns it with using bwa, and then calls
+#variants against the reference provided in nextflow.config. Nextflow config contains all the environmental variables
+#that should be declared before running this script, while outpath should contains the directory of the path that
+#the simulator works on
 
 project ='version2.0'
 outpath ="/data/backup/metacaller/simulatedgenomes/mason"
@@ -11,13 +15,6 @@ bam_output_file="$outpath/$project/output/aligned.bam"
 sample_sam="$outpath/$project/output/sample.sam"
 sortedsample_sam="$outpath/$project/output/sortedsample.sam"
 bam_output_file_processed="$outpath/$project/output/aligned.bam.bam"
-num =Channel.from(1)
-num_1 =Channel.from(1)
-num_2 =Channel.from(1)
-num_3 =Channel.from(1)
-num_4 =Channel.from(1)
-num_5 =Channel.from(1)
-num_6 =Channel.from(1)
 
 process simulate {
 
