@@ -17,23 +17,15 @@ def execute_main(paths):
     sample, truth = vcf_load_references(paths)
     truth_dictionary = {}
     create_truth_dictionary(truth_dictionary,truth)
-    print "length of truth dictionary", len(truth_dictionary)
     sample_dictionary = create_sample_dictionary(sample)
-    print "length of sample dictionary", len(sample_dictionary)
     actual_predictions, final_array_of_samples, final_truth_list = match_created_with_truth(truth_dictionary,
                                                                                             sample_dictionary)
-    print "lengths of actual_predictions, final_array_of_samples, final_truth_list", len(actual_predictions), len(final_array_of_samples), len(final_truth_list)
     array_of_predicted, array_of_truth, dict_of_samples, list_of_truth = restructure_data(actual_predictions,
                                                                                           final_array_of_samples,
                                                                                           final_truth_list,
                                                                                           truth_dictionary)
     fill_negative_samples(array_of_predicted, array_of_truth, dict_of_samples, list_of_truth)
-    print len(list_of_truth)
-    print "array of predicted new length is", len(array_of_predicted)
     perf_measure(array_of_truth, array_of_predicted)
-    print "final precision score is :", precision_score(array_of_truth, array_of_predicted)
-    print "final recall score is :", recall_score(array_of_truth, array_of_predicted)
-    print "final F1 score is : ", f1_score(array_of_truth, array_of_predicted)
 
 
 def fill_negative_samples(array_of_predicted, array_of_truth, dict_of_samples, list_of_truth):

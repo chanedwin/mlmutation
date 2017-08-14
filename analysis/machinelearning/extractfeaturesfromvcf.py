@@ -6,6 +6,9 @@ import warnings
 import functools
 
 
+#File containing methods used to extract features from pyvcf record entries.
+
+
 ENTROPY_CONSTANT_RANGE = 5
 
 

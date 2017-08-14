@@ -4,7 +4,7 @@ import numpy as np
 from sklearn.metrics import *
 
 #python wrapper script that takes in 2 vcf files, one vcf files of predicted mutations and another ground truth
-#and calculates the percentage of files that were falsely
+#and calculates the f1 score
 
 parser = argparse.ArgumentParser(description="train neural net")
 parser.add_argument('-p', '--predict', help="give directories with files")

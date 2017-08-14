@@ -2,8 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 
-# Read the data into a pandas DataFrame.
-# This script uses the matplotlib library to print training accuracy data
+# This script uses the matplotlib library to print training accuracy and loss against epochs
 
 accuracy = np.load("D:\\pythondata\\acc.txt.npy")[:30]
 loss = np.load("D:\\pythondata\\loss.txt.npy")[:30]

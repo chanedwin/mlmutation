@@ -3,26 +3,19 @@ import time
 import argparse
 import numpy as np
 import sys
+import logging
 
 import extractfeaturesfromvcf as featex
 import generateresultsforneuralnet as resgen
 import helpermethods as helper
 
 # this script builds the neural network matrixes that will be used in machine learning.
-# it extracts all the features,
-
-### OUTPUT GOAL :1 a dictionary of lists, where the dictionary keys are mutations, and the list contains a matrix containing information of all six callers
-
-### To create the keys for the dictionary, all VCF files are first unioned to find a set of unique dictionary keys
-
-### Secondly, a check matrix is created such that it is known which mutations are called in which caller, and which are not (basic 1,0 matrix)
-
-### Finally, for each record in each file, a checkscript first checks if that mutation is inside the caller, if it is, append data, if not, append all 0s
-
+# it extracts all the features
 # this method takes in a path and returns training matrixes for the ANN
 # The path should contain n caller vcf files and 1 truth file
 # vcf files should be labelled with vcf and truth file should be labelled with truth
 # no other file should be present in the folder
+#
 
 LIST_OF_INPUTS_NAME = '/ann_data/samplelist.p'
 TRUTH_DICTIONARY_NAME = '/ann_data/truthdict.p'
@@ -42,6 +35,7 @@ number_of_callers = 5
 # It then saves files into a directory determined by the final variables
 
 def execute_main(user_input):
+    logging.
     input_samples, referencepath, output_location = load_references(user_input)
     my_x_dataset, my_y_dataset, list_of_samples, truth_dictionary, length_of_caller_outputs, \
     vcf_record_list = main_analyse_samples_and_truth(input_samples, referencepath)
