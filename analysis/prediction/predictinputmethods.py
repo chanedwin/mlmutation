@@ -1,9 +1,25 @@
 import argparse
 import logging
 import sys
+import csv
+import time
 
 import matplotlib
 import vcf
+import sklearn.manifold
+import sklearn.preprocessing
+
+matplotlib.use('Agg')
+
+from pomegranate import *
+from buildcdpmethods import *
+from multiprocessing import Pool
+
+
+#this script generates the bayesian network that ranks the mutations obtained from vcf files. Firstly, it processes
+#the file by extract all the relevant features from the VCF records (stored using pyvcf). Subsequently, it
+#generates a bayesian network, and updates this network using the features obtained from the VCF records.
+
 
 #declare constants and scores for probability network
 
@@ -19,29 +35,23 @@ CLINVAR_NON_DELETERIOUS_SCORE = 0.2
 
 CLINVAR_DELETERIOUS_SCORE = 0.8
 
-matplotlib.use('Agg')
-
-from pomegranate import *
-from buildcdpmethods import *
-
-# generate log and constants
 LOAD_VCF_LOG = "loading annovar scores"
 VCF_FILE_NOT_FOUND = "Could not find vcf file, exiting programme"
 
-class MutationScores:
-    snp_score = 0
-    list_of_important_mutations = []
 
-
+#main control function that loads list of vcf records, parses vcf records into a matrix of scores, performs TSNE,
+#normalises the score and then generates the bayesian inference network. Finally, it prints the full list of scores
 
 def execute_main(paths):
     vcf_object = load_vcf_object_from_input_path(paths)
     full_list_of_scores = obtain_full_list_of_scores(vcf_object)
+    perform_tsne(full_list_of_scores)
     normalise_scores_in_list_of_scores(full_list_of_scores)
     generate_bayesian_network_and_inference(full_list_of_scores)
     print_data_of_full_list_of_scores(full_list_of_scores)
 
 def load_vcf_object_from_input_path(paths):
+    logging.info('Loading VCF from file')
     paths = vars(paths)  #convert paths to a dictionary object
     input = paths['input']
     logging.info(LOAD_VCF_LOG)
@@ -50,56 +60,65 @@ def load_vcf_object_from_input_path(paths):
     except :
         logging.info(VCF_FILE_NOT_FOUND)
         exit()
-    write_file_Name = input + "finalscores.txt"
-    f = file(write_file_Name, 'w')
-    sys.stdout = f         #convert file to sysout
     return opened_vcf_file
 
+
+
 def obtain_full_list_of_scores(vcf_object):
+    logging.info('Extracting features from each vcf record')
+    pool = Pool(processes=20)
     number_of_counts = 0
     full_list_of_scores = []
-    for record in vcf_object:
-        number_of_counts += 1
-        nn_prediction, list_of_scores = get_annovar_scores_of_each_record(record)
-        if not list(filter(lambda x: x != None, list_of_scores)):   #if it is an empty list, throw it away
-            continue
-        append_clinvar_scores(list_of_scores, record)        #TO-FIX make append and generate the same
-        snp_present = generate_snp_score(record)
-        full_list_of_scores.append([float(nn_prediction), list_of_scores, record, snp_present])
+    start = time.time()
+    full_list_of_scores.append(pool.map(get_scores_of_each_record,vcf_object))
+    end = time.time()
+    print end - start
     return full_list_of_scores
 
 
-def generate_snp_score(record):
-    snp_present = UNCOMMON_SNP_SCORE
+def append_snp_score(list_of_scores, record):
     if record.INFO['snp138'][0] != None:
         snp_present = COMMON_SNP_SCORE
-    return snp_present
+    else :
+        snp_present = UNCOMMON_SNP_SCORE
+    list_of_scores.append(snp_present)
 
 
 def append_clinvar_scores(list_of_scores, record):
     if record.INFO['clinvar_20150629'][0] != None:
-        list_of_scores.append(CLINVAR_DELETERIOUS_SCORE)
+        clinvar_score = CLINVAR_DELETERIOUS_SCORE
     else:
-        list_of_scores.append(CLINVAR_NON_DELETERIOUS_SCORE)
+        clinvar_score = CLINVAR_NON_DELETERIOUS_SCORE
+    list_of_scores.append(clinvar_score)
 
 
-def get_annovar_scores_of_each_record(record):
-    list_of_important_mutations = [record.INFO['SIFT_score'], record.INFO['LRT_score'], record.INFO['MutationAssessor_score'],
-                          record.INFO['MutationTaster_score'], record.INFO['Polyphen2_HVAR_score'],
-                          record.INFO['FATHMM_score']]
     #SIFT_score [1,0]
     #LRT_score [1,0]
     #FATHMM_score[1,0]
     #MutationTaster[0,1]
     #MutationAssessor[0,1] = ???
     #Polyphen2_HVAR_score[0,1]
+
+def get_scores_of_each_record(record):
+    list_of_important_mutations = [record.INFO['SIFT_score'], record.INFO['LRT_score'], record.INFO['MutationAssessor_score'],
+                          record.INFO['MutationTaster_score'], record.INFO['Polyphen2_HVAR_score'],
+                          record.INFO['FATHMM_score']]
+    list_of_important_mutations = map(lambda x: None if x[0] == None else float(x[0]), list_of_important_mutations)
+    if not list(filter(lambda x: x != None, list_of_important_mutations)):  # if it is an empty list, throw it away
+        return None
+    append_clinvar_scores(list_of_important_mutations, record)  # TO-FIX make append and generate the same
+    append_snp_score(list_of_important_mutations, record)
+    append_neural_network_score(list_of_important_mutations, record)
+    return list_of_important_mutations
+
+
+def append_neural_network_score(list_of_important_mutations, record):
     if 'NN_prediction' in record.INFO:
         NN_prediction = record.INFO['NN_prediction'][0]
     else:
         NN_prediction = NEURAL_NETWORK_PREDICTION_NULL_VALUE
-    list_of_important_mutations = map(lambda x: x[0], list_of_important_mutations)
-    list_of_important_mutations = map(lambda x: None if x == None else float(x), list_of_important_mutations)
-    return NN_prediction, list_of_important_mutations
+    list_of_important_mutations.append(NN_prediction)
+
 
 def normalise_scores_in_list_of_scores(full_list_of_scores):
     for i in range(TOTAL_NUMBER_OF_BAYESIAN_FEATURES):
@@ -116,6 +135,16 @@ def normalise_scores_in_list_of_scores(full_list_of_scores):
             else:
                 item[1][i] = 0.5
 
+
+def perform_tsne(full_list_of_scores):
+    array_of_scores = map(lambda x : x[1][:-1], full_list_of_scores)
+    print full_list_of_scores[:10]
+    print array_of_scores[:10]
+    imp = sklearn.preprocessing.Imputer()
+    processed_array_of_scores = imp.fit_transform(array_of_scores)
+    results = sklearn.manifold.TSNE().fit_transform(processed_array_of_scores)
+    write_to_csv(results,"tsne_results.csv")
+    sys.exit()
 
 def generate_bayesian_network_and_inference(full_list_of_scores):
     for record in full_list_of_scores:
@@ -182,8 +211,17 @@ def print_data_of_full_list_of_scores(full_list_of_scores):
     for item in full_list_of_scores:
         print item[2], item, item[2].INFO['Gene.refGene']
 
+def write_to_csv(data_matrix, file_name):
+    with open(file_name, 'wb') as csvfile:
+        file_writer = csv.writer(csvfile, delimiter=' ',
+                                quotechar='|', quoting=csv.QUOTE_MINIMAL)
+        for line in data_matrix :
+            file_writer.writerow(line)
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="train neural net")
     parser.add_argument('-i', '--input', help="give directories with files")
     paths = parser.parse_args()
+    logging.info('Starting Prediction Pipeline')
     execute_main(paths)
