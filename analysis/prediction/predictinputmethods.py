@@ -3,6 +3,8 @@ import logging
 import sys
 import csv
 import time
+import numpy as np
+import copy
 
 import matplotlib
 import vcf
@@ -57,22 +59,33 @@ def load_vcf_object_from_input_path(paths):
     logging.info(LOAD_VCF_LOG)
     try:
         opened_vcf_file = vcf.Reader(open(input, 'r'))
+        opened_vcf_file_2 = vcf.Reader(open(input, 'r'))
     except :
         logging.info(VCF_FILE_NOT_FOUND)
         exit()
-    return opened_vcf_file
+    return (opened_vcf_file,opened_vcf_file_2)
 
 
 
 def obtain_full_list_of_scores(vcf_object):
     logging.info('Extracting features from each vcf record')
     pool = Pool(processes=20)
-    number_of_counts = 0
     full_list_of_scores = []
     start = time.time()
-    full_list_of_scores.append(pool.map(get_scores_of_each_record,vcf_object))
+    print "starting pooled analysis"
+    for record in vcf_object[0]:
+        pool.apply_async(get_scores_of_each_record, args=(record, ), callback=full_list_of_scores.append)
+    pool.close()
+    pool.join()
     end = time.time()
-    print end - start
+    print "pooled time is", (end - start)
+    new_list_of_scores = []
+    new_start = time.time()
+    for record in vcf_object[1]:
+        new_list_of_scores.append(get_scores_of_each_record(record))
+    new_end = time.time()
+    print "unpooled time is", (new_end - new_start)
+    sys.exit()
     return full_list_of_scores
 
 
@@ -100,9 +113,10 @@ def append_clinvar_scores(list_of_scores, record):
     #Polyphen2_HVAR_score[0,1]
 
 def get_scores_of_each_record(record):
-    list_of_important_mutations = [record.INFO['SIFT_score'], record.INFO['LRT_score'], record.INFO['MutationAssessor_score'],
+    raw_list_of_important_mutations = [record.INFO['SIFT_score'], record.INFO['LRT_score'], record.INFO['MutationAssessor_score'],
                           record.INFO['MutationTaster_score'], record.INFO['Polyphen2_HVAR_score'],
                           record.INFO['FATHMM_score']]
+    list_of_important_mutations = copy.deepcopy(raw_list_of_important_mutations)
     list_of_important_mutations = map(lambda x: None if x[0] == None else float(x[0]), list_of_important_mutations)
     if not list(filter(lambda x: x != None, list_of_important_mutations)):  # if it is an empty list, throw it away
         return None
@@ -140,11 +154,19 @@ def perform_tsne(full_list_of_scores):
     array_of_scores = map(lambda x : x[1][:-1], full_list_of_scores)
     print full_list_of_scores[:10]
     print array_of_scores[:10]
-    imp = sklearn.preprocessing.Imputer()
-    processed_array_of_scores = imp.fit_transform(array_of_scores)
+    processed_array_of_scores = count_and_impute_nan_values(array_of_scores)
     results = sklearn.manifold.TSNE().fit_transform(processed_array_of_scores)
     write_to_csv(results,"tsne_results.csv")
     sys.exit()
+
+
+def count_and_impute_nan_values(array_of_scores):
+    num_nan = np.isnan(array_of_scores).sum()
+    logging.warning("found " + num_nan + " nan values in dataset, imputing via mean strategy")
+    imp = sklearn.preprocessing.Imputer()
+    processed_array_of_scores = imp.fit_transform(array_of_scores)
+    return processed_array_of_scores
+
 
 def generate_bayesian_network_and_inference(full_list_of_scores):
     for record in full_list_of_scores:

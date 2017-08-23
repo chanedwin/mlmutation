@@ -4,7 +4,7 @@ import scipy.stats
 
 import warnings
 import functools
-
+import sklearn
 
 #File containing methods used to extract features from pyvcf record entries.
 
@@ -15,9 +15,7 @@ ENTROPY_CONSTANT_RANGE = 5
 def getallvalues(record, reference_dictionary, base_entropy, file_name):
     is_snp = has_snp(record)
     is_indel = has_indel(record)
-    for alternate in record.ALT:
-       if "<" in str(alternate) or ">" in str(alternate) :
-            alternate = ""
+    record.ALT = list(filter(lambda x : ">" or "<" not in x, record.ALT)) #remove illegal entries
     temp_list = []
     for item in record.ALT:
         temp_list.append(str(item).upper())
@@ -295,3 +293,4 @@ def st_parse_indel(record):
     DP4 = record.INFO['DP4'][0] + record.INFO['DP4'][1] + record.INFO['DP4'][2] + record.INFO['DP4'][3]
     fullinfo.append(DP4)
     return fullinfo
+
