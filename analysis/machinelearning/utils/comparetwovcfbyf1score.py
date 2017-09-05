@@ -1,5 +1,6 @@
-from datacleaningfeatureextraction import *
-from generateresultsforneuralnet import *
+from analysis.machinelearning.core.datacleaningfeatureextraction import *
+from analysis.machinelearning.core.generateresultsforneuralnet import *
+
 
 def vcf_load_references(paths):
     paths = vars(paths)

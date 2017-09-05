@@ -1,16 +1,9 @@
-import argparse
-import os
-import sys
-import time
 import unittest
-import helpermethods as helper
 
-import numpy as np
-from Bio import SeqIO
 from sklearn.metrics import *
-from datacleaningfeatureextraction import *
 
-from extractfeaturesfromvcf import *
+from analysis.machinelearning.core.datacleaningfeatureextraction import *
+from analysis.machinelearning.core.extractfeaturesfromvcf import *
 
 original_vcf_reader = "/data/backup/metacaller/stage/data/version6.3a/hc.vcf.normalisedtrain.vcf"
 

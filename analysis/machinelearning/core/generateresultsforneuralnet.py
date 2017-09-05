@@ -1,20 +1,21 @@
 import argparse
 import cPickle as pickle
 import sys
-import helpermethods as helper
 
 import numpy as np
 import vcf
 from imblearn.over_sampling import SMOTE
+from keras.callbacks import *
 from keras.layers import Dense, Dropout, Activation, Merge
 from keras.layers.advanced_activations import LeakyReLU
 from keras.layers.normalization import BatchNormalization
 from keras.models import Sequential
-from keras.optimizers import RMSprop
-from keras.callbacks import *
 from keras.models import load_model
+from keras.optimizers import RMSprop
 from sklearn.metrics import *
 from sklearn.model_selection import train_test_split
+
+import analysis.machinelearning.core.helpermethods as helper
 
 STEP_INCREMENT = 10
 

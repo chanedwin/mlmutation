@@ -1,13 +1,13 @@
-import os
-import time
 import argparse
-import numpy as np
+import os
 import sys
-import logging
+import time
 
-import extractfeaturesfromvcf as featex
-import generateresultsforneuralnet as resgen
-import helpermethods as helper
+import numpy as np
+
+import analysis.machinelearning.core.generateresultsforneuralnet as resgen
+import analysis.machinelearning.core.helpermethods as helper
+from analysis.machinelearning.core import extractfeaturesfromvcf as featex
 
 # this script builds the neural network matrixes that will be used in machine learning.
 # it extracts all the features
