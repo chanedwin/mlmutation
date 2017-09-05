@@ -11,17 +11,11 @@ import sklearn.manifold
 import sklearn.preprocessing
 import vcf
 
-NAME_OF_GENE_FIELD = 'Gene.refGene'
-
 matplotlib.use('Agg')
 
 from pomegranate import *
 from buildcdpmethods import *
 from multiprocessing import Pool
-
-'''
-TO-ADD COMMENTS
-'''
 
 COMMON_SNP_SCORE = 0.4
 UNCOMMON_SNP_SCORE = 0.6
@@ -31,9 +25,10 @@ CLINVAR_NON_DELETERIOUS_SCORE = 0.2
 CLINVAR_DELETERIOUS_SCORE = 0.8
 LOAD_VCF_LOG = "loading annovar scores"
 VCF_FILE_NOT_FOUND = "Could not find vcf file, exiting programme"
-NAMES_OF_RELEVANT_SCORE_FIELDS = ['SIFT_score', 'LRT_score', 'MutationAssessor_score', 'Polyphen2_HVAR_score', 'MutationTaster_score',
-                  'FATHMM_score']
-
+NAMES_OF_RELEVANT_SCORE_FIELDS = ['SIFT_score', 'LRT_score', 'MutationAssessor_score', 'Polyphen2_HVAR_score',
+                                  'MutationTaster_score',
+                                  'FATHMM_score']
+NAME_OF_GENE_FIELD = 'Gene.refGene'
 
 
 def execute_main(paths):
@@ -41,15 +36,16 @@ def execute_main(paths):
     vcf_object = parse_vcf_data_from_vcf_file(paths)
     end_time = time.time()
     print "time taken", (end_time - start_time)
-    #start_time = time.time()
-    #vcf_object = load_vcf_object_from_input_path(paths)
-    #full_list_of_scores = obtain_full_list_of_scores(vcf_object)
+    # start_time = time.time()
+    # vcf_object = load_vcf_object_from_input_path(paths)
+    # full_list_of_scores = obtain_full_list_of_scores(vcf_object)
     # perform_tsne(full_list_of_scores)
     # normalise_scores_in_list_of_scores(full_list_of_scores)
     # generate_bayesian_network_and_inference(full_list_of_scores)
     # print_data_of_full_list_of_scores(full_list_of_scores)
-    #end_time = time.time()
-    #print "time taken", (end_time - start_time)
+    # end_time = time.time()
+    # print "time taken", (end_time - start_time)
+
 
 def fast_parse_vcf(vcf_file):
     """lazy vcf reader"""
@@ -60,36 +56,40 @@ def fast_parse_vcf(vcf_file):
             break
         yield data
 
+
 def parse_vcf_data_from_vcf_file(paths):
     paths = vars(paths)  # convert paths to a dictionary object
     input = paths['input']
-    full_dataset =[]
+    full_dataset = []
     pool = Pool(processes=20)
-    full_dataset.extend(pool.map(async_parse_data,fast_parse_vcf(input),10000))
-    full_dataset = list(filter(lambda x : x, full_dataset))   #throw away none returns
+    full_dataset.extend(pool.map(async_parse_data, fast_parse_vcf(input), 10000))
+    full_dataset = list(filter(lambda x: x, full_dataset))  # throw away none returns
     print full_dataset
+
 
 def async_parse_data(chunk):
     if re.match("^#.*", chunk):
-        return None                        #throw away headers
+        return None  # throw away headers
     split_data = re.split(";", chunk)
-    filtered_split_data = list(filter(lambda x: "=." not in x, split_data))  #filter empty fields
-    filtered_split_data = list(filter(lambda x: "=" in x, filtered_split_data))   #filter non-score fields
-    dict_split_data = dict(map(lambda x: x.split("="), filtered_split_data))     #each field now a key:value
+    filtered_split_data = list(filter(lambda x: "=." not in x, split_data))  # filter empty fields
+    filtered_split_data = list(filter(lambda x: "=" in x, filtered_split_data))  # filter non-score fields
+    dict_split_data = dict(map(lambda x: x.split("="), filtered_split_data))  # each field now a key:value
     relevant_data = []
     iterate_through_relevant_scores(relevant_data, dict_split_data, NAMES_OF_RELEVANT_SCORE_FIELDS)
     if not list(filter(lambda x: x, relevant_data)):
-        return None                        # throw away if no entries in relevant scores
+        return None  # throw away if no entries in relevant scores
     add_if_record_present_else_add_zero(relevant_data, dict_split_data, NAME_OF_GENE_FIELD)
     append_clinvar_scores_if_present(relevant_data, dict_split_data)
     append_snp_score_if_present(relevant_data, dict_split_data)
     return relevant_data
 
+
 def iterate_through_relevant_scores(my_data, record, fields):
-    for field in fields :
+    for field in fields:
         add_if_record_present_else_add_zero(my_data, record, field)
 
-#Deprecated
+
+# Deprecated
 def load_vcf_object_from_input_path(paths):
     logging.info('Loading VCF from file')
     paths = vars(paths)  # convert paths to a dictionary object
@@ -103,13 +103,15 @@ def load_vcf_object_from_input_path(paths):
     logging.info('Done loading VCF from file')
     return opened_vcf_file
 
-#Deprecated
+
+# Deprecated
 def chunks(l, n):
     """Yield successive n-sized chunks from l."""
     for i in range(0, len(l), n):
         yield l[i:i + n]
 
-#Deprecated
+
+# Deprecated
 def obtain_full_list_of_scores(vcf_object):
     logging.info('Extracting features from each vcf record')
     pool = Pool(processes=100)
@@ -126,16 +128,17 @@ def obtain_full_list_of_scores(vcf_object):
     print "pooled time is", (end - start)
     return full_list_of_scores
 
+
 def add_if_record_present_else_add_zero(relevant_data, record, key):
-    if key in record :
+    if key in record:
         if record[key] != ".":
             relevant_data.append(record[key])
-    else :
+    else:
         relevant_data.append(0.0)
 
 
 def append_snp_score_if_present(list_of_scores, record):
-    if 'snp138' in record :
+    if 'snp138' in record:
         if record['snp138'] != ".":
             snp_present = COMMON_SNP_SCORE
     else:
@@ -144,7 +147,7 @@ def append_snp_score_if_present(list_of_scores, record):
 
 
 def append_clinvar_scores_if_present(list_of_scores, record):
-    if 'clinvar_20150629' in record :
+    if 'clinvar_20150629' in record:
         if record['clinvar_20150629'] != ".":
             clinvar_score = CLINVAR_DELETERIOUS_SCORE
     else:
@@ -167,7 +170,8 @@ def append_neural_network_score_if_present(list_of_important_mutations, record):
         NN_prediction = NEURAL_NETWORK_PREDICTION_NULL_VALUE
     list_of_important_mutations.append(NN_prediction)
 
-#MUST CHANGE USE BINARY MAPPING
+
+# MUST CHANGE USE BINARY MAPPING
 def normalise_scores_in_list_of_scores(full_list_of_scores):
     for i in range(TOTAL_NUMBER_OF_BAYESIAN_FEATURES):
         min_num = 1000000
