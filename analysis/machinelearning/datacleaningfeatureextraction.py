@@ -27,15 +27,14 @@ X_DATA_NAME = '/ann_data/myXdata.txt'
 NUMBER_OF_CALLERS = 5
 negative_sample_ratio = 1
 positive_sample_ratio = 2
-sample_limit = 10000
-number_of_callers = 5
+SAMPLE_LIMIT = 10000
+NUMBER_OF_CALLER = 5
 
 
 # This method take in the user input, and loads it into local variables. It executes the main_analyse_samples file
 # It then saves files into a directory determined by the final variables
 
 def execute_main(user_input):
-    logging.
     input_samples, referencepath, output_location = load_references(user_input)
     my_x_dataset, my_y_dataset, list_of_samples, truth_dictionary, length_of_caller_outputs, \
     vcf_record_list = main_analyse_samples_and_truth(input_samples, referencepath)
@@ -110,7 +109,7 @@ def create_list_of_paths(path):
 
 
 def fill_sample_dictionary(base_entropy, sample_dictionary, path, reference_dictionary):
-    callerlengths = [0] * number_of_callers
+    callerlengths = [0] * NUMBER_OF_CALLER
     index = 0
     total_mode_value = 0
     list_of_paths = create_list_of_paths(path)
@@ -321,7 +320,7 @@ def iterate_through_dictionary_to_find_mode_size(full_dictionary):
     samples = 0
     for key in full_dictionary:
         samples += 1
-        if samples == sample_limit:
+        if samples == SAMPLE_LIMIT:
             break
         count = 0
         for item in full_dictionary[key]:

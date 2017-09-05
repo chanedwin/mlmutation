@@ -8,7 +8,7 @@ import helpermethods as helper
 import numpy as np
 from Bio import SeqIO
 from sklearn.metrics import *
-from generatematrixesforneuralnet import *
+from datacleaningfeatureextraction import *
 
 from extractfeaturesfromvcf import *
 

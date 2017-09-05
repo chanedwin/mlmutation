@@ -4,14 +4,31 @@ import unittest
 
 class RecordInjection:
 
-    def __init__(self, record, alt):
-        assert (type(record) is str)
+    def __init__(self, ref, alt):
+        assert (type(ref) is str)
         assert (type(alt) is list or type(alt) is tuple)
-        self.REF = record
+        self.REF = ref
         self.ALT = alt
+
+    def get_ref(self):
+        return self.REF
+
+    def get_alt(self):
+        return self.ALT
 
 class TestFeatureMethods(unittest.TestCase):
 
+    def test_convert_to_upper(self):
+        test_case_snp_one = RecordInjection("a", ["c", "g"])
+        mlextract.convert_all_case_in_alt_to_upper_case(test_case_snp_one)
+        test_case_snp_two = RecordInjection("A", ["C", "G"])
+        test_case_snp_three = RecordInjection("AaA", ["CcC", "ggG"])
+        mlextract.convert_all_case_in_alt_to_upper_case(test_case_snp_one)
+        test_case_snp_four = RecordInjection("AAA", ["CCC", "GGG"])
+        self.assertEqual(test_case_snp_one.get_ref(),test_case_snp_two.get_ref())
+        self.assertEqual(test_case_snp_one.get_alt(),test_case_snp_two.get_alt())
+        self.assertEqual(test_case_snp_three.get_ref(), test_case_snp_four.get_ref())
+        self.assertEqual(test_case_snp_three.get_alt(), test_case_snp_four.get_alt())
 
     def test_get_entropy_prob(self):
         self.assertEqual(mlextract.get_entropy_prob("AAA"),(1, 0, 0, 0))
