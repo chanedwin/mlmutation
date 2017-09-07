@@ -82,6 +82,19 @@ def iterate_through_relevant_scores(my_data, record, fields):
     for field in fields:
         add_if_record_present_else_add_zero(my_data, record, field)
 
+def get_scores_of_each_record(record):
+    raw_list_of_important_mutations = [record.INFO['SIFT_score'], record.INFO['LRT_score'],
+                                       record.INFO['MutationAssessor_score'],
+                                       record.INFO['MutationTaster_score'], record.INFO['Polyphen2_HVAR_score'],
+                                       record.INFO['FATHMM_score']]
+    list_of_important_mutations = map(lambda x: None if x[0] == None else float(x[0]), raw_list_of_important_mutations)
+    if not list(filter(lambda x: x != None, list_of_important_mutations)):  # if it is an empty list, throw it away
+        return None
+    append_clinvar_scores(list_of_important_mutations, record)  # TO-FIX make append and generate the same
+    append_snp_score(list_of_important_mutations, record)
+    append_neural_network_score(list_of_important_mutations, record)
+    return list_of_important_mutations
+
 
 # Deprecated
 def load_vcf_object_from_input_path(paths):
@@ -95,6 +108,9 @@ def load_vcf_object_from_input_path(paths):
         logging.info(VCF_FILE_NOT_FOUND)
         exit()
     logging.info('Done loading VCF from file')
+    new_list_of_scores = []
+    for record in opened_vcf_file:
+        new_list_of_scores.append(get_scores_of_each_record(record))
     return opened_vcf_file
 
 
