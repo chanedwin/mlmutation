@@ -30,16 +30,11 @@ NAMES_OF_RELEVANT_SCORE_FIELDS = ['SIFT_score', 'LRT_score', 'MutationAssessor_s
                                   'FATHMM_score']
 NAME_OF_GENE_FIELD = 'Gene.refGene'
 
-
 def execute_main(paths):
-    start_time = time.time()
     vcf_object = parse_vcf_data_from_vcf_file(paths)
-    end_time = time.time()
-    print "time taken", (end_time - start_time)
-    # start_time = time.time()
-    # vcf_object = load_vcf_object_from_input_path(paths)
-    # full_list_of_scores = obtain_full_list_of_scores(vcf_object)
-    # perform_tsne(full_list_of_scores)
+    vcf_object = load_vcf_object_from_input_path(paths)
+    full_list_of_scores = obtain_full_list_of_scores(vcf_object)
+    perform_tsne(vcf_object)
     # normalise_scores_in_list_of_scores(full_list_of_scores)
     # generate_bayesian_network_and_inference(full_list_of_scores)
     # print_data_of_full_list_of_scores(full_list_of_scores)
@@ -62,10 +57,9 @@ def parse_vcf_data_from_vcf_file(paths):
     input = paths['input']
     full_dataset = []
     pool = Pool(processes=20)
-    full_dataset.extend(pool.map(async_parse_data, fast_parse_vcf(input), 10000))
+    full_dataset.extend(pool.imap(async_parse_data, fast_parse_vcf(input), 10000))
     full_dataset = list(filter(lambda x: x, full_dataset))  # throw away none returns
-    print full_dataset
-
+    return full_dataset
 
 def async_parse_data(chunk):
     if re.match("^#.*", chunk):
