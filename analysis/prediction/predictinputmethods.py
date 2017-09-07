@@ -25,21 +25,43 @@ CLINVAR_NON_DELETERIOUS_SCORE = 0.2
 CLINVAR_DELETERIOUS_SCORE = 0.8
 LOAD_VCF_LOG = "loading annovar scores"
 VCF_FILE_NOT_FOUND = "Could not find vcf file, exiting programme"
-NAMES_OF_RELEVANT_SCORE_FIELDS = ['SIFT_score', 'LRT_score', 'MutationAssessor_score', 'Polyphen2_HVAR_score',
-                                  'MutationTaster_score',
+NAMES_OF_RELEVANT_SCORE_FIELDS = ['SIFT_score', 'LRT_score', 'MutationAssessor_score',
+                                  'MutationTaster_score', 'Polyphen2_HVAR_score',
                                   'FATHMM_score']
 NAME_OF_GENE_FIELD = 'Gene.refGene'
 
+
 def execute_main(paths):
+    start = time.time()
     vcf_object = parse_vcf_data_from_vcf_file(paths)
-    vcf_object = load_vcf_object_from_input_path(paths)
-    full_list_of_scores = obtain_full_list_of_scores(vcf_object)
-    perform_tsne(vcf_object)
+    end = time.time()
+    print "parallel took ", (end - start)
+    vcf_object_2 = load_vcf_object_from_input_path(paths)
+    end = time.time()
+    print "sequential took ", (end - start)
+    print double_check_similar_objects(vcf_object, vcf_object_2)
+    # full_list_of_scores = obtain_full_list_of_scores(vcf_object)
+    # perform_tsne(vcf_object)
     # normalise_scores_in_list_of_scores(full_list_of_scores)
     # generate_bayesian_network_and_inference(full_list_of_scores)
     # print_data_of_full_list_of_scores(full_list_of_scores)
     # end_time = time.time()
     # print "time taken", (end_time - start_time)
+
+
+def double_check_similar_objects(first_obj, second_obj):
+    names = tuple(map(lambda x: tuple(x), first_obj))
+    names2 = list(map(lambda x: tuple(x), second_obj))
+    print len(names), len(names2)
+    for entry in names :
+        if entry not in names2 :
+            print entry,"not found in name2"
+        else :
+            names2.remove(entry)
+    print names2
+    first_set = set(map(tuple, first_obj))
+    secnd_set = set(map(tuple, second_obj))
+    return first_set == secnd_set
 
 
 def fast_parse_vcf(vcf_file):
@@ -61,6 +83,7 @@ def parse_vcf_data_from_vcf_file(paths):
     full_dataset = list(filter(lambda x: x, full_dataset))  # throw away none returns
     return full_dataset
 
+
 def async_parse_data(chunk):
     if re.match("^#.*", chunk):
         return None  # throw away headers
@@ -72,9 +95,10 @@ def async_parse_data(chunk):
     iterate_through_relevant_scores(relevant_data, dict_split_data, NAMES_OF_RELEVANT_SCORE_FIELDS)
     if not list(filter(lambda x: x, relevant_data)):
         return None  # throw away if no entries in relevant scores
-    add_if_record_present_else_add_zero(relevant_data, dict_split_data, NAME_OF_GENE_FIELD)
+    relevant_data.insert(0, dict_split_data[NAME_OF_GENE_FIELD])
     append_clinvar_scores_if_present(relevant_data, dict_split_data)
     append_snp_score_if_present(relevant_data, dict_split_data)
+    append_neural_network_score_if_present(relevant_data, dict_split_data)
     return relevant_data
 
 
@@ -82,18 +106,53 @@ def iterate_through_relevant_scores(my_data, record, fields):
     for field in fields:
         add_if_record_present_else_add_zero(my_data, record, field)
 
+
+# Deprecated
 def get_scores_of_each_record(record):
     raw_list_of_important_mutations = [record.INFO['SIFT_score'], record.INFO['LRT_score'],
                                        record.INFO['MutationAssessor_score'],
                                        record.INFO['MutationTaster_score'], record.INFO['Polyphen2_HVAR_score'],
                                        record.INFO['FATHMM_score']]
-    list_of_important_mutations = map(lambda x: None if x[0] == None else float(x[0]), raw_list_of_important_mutations)
-    if not list(filter(lambda x: x != None, list_of_important_mutations)):  # if it is an empty list, throw it away
+    list_of_important_mutations = map(lambda x: 0.0 if x[0] == None else float(x[0]), raw_list_of_important_mutations)
+    if not list(filter(lambda x: x, list_of_important_mutations)):  # if it is an empty list, throw it away
         return None
+    list_of_important_mutations = map(lambda x: 0.0 if x == None else float(x), list_of_important_mutations)
+    record_name = record.INFO['Gene.refGene'][0] if len(record.INFO['Gene.refGene']) == 1 else str(
+        reduce(lambda x, y: x + "," + y, record.INFO['Gene.refGene']))
+    list_of_important_mutations.insert(0, record_name)
     append_clinvar_scores(list_of_important_mutations, record)  # TO-FIX make append and generate the same
     append_snp_score(list_of_important_mutations, record)
     append_neural_network_score(list_of_important_mutations, record)
+    if list_of_important_mutations[-1] == 0.063661 :
+        print record.INFO
     return list_of_important_mutations
+
+
+# Deprecated
+def append_neural_network_score(list_of_important_mutations, record):
+    if 'NN_prediction' in record.INFO:
+        NN_prediction = float(record.INFO['NN_prediction'][0])
+    else:
+        NN_prediction = NEURAL_NETWORK_PREDICTION_NULL_VALUE
+    list_of_important_mutations.append(NN_prediction)
+
+
+# Deprecated
+def append_snp_score(list_of_scores, record):
+    if record.INFO['snp138'][0] != None:
+        snp_present = COMMON_SNP_SCORE
+    else:
+        snp_present = UNCOMMON_SNP_SCORE
+    list_of_scores.append(snp_present)
+
+
+# Deprecated
+def append_clinvar_scores(list_of_scores, record):
+    if record.INFO['clinvar_20150629'][0] != None:
+        clinvar_score = CLINVAR_DELETERIOUS_SCORE
+    else:
+        clinvar_score = CLINVAR_NON_DELETERIOUS_SCORE
+    list_of_scores.append(clinvar_score)
 
 
 # Deprecated
@@ -111,7 +170,8 @@ def load_vcf_object_from_input_path(paths):
     new_list_of_scores = []
     for record in opened_vcf_file:
         new_list_of_scores.append(get_scores_of_each_record(record))
-    return opened_vcf_file
+    new_list_of_scores = list(filter(lambda x: x, new_list_of_scores))
+    return new_list_of_scores
 
 
 # Deprecated
@@ -142,7 +202,7 @@ def obtain_full_list_of_scores(vcf_object):
 def add_if_record_present_else_add_zero(relevant_data, record, key):
     if key in record:
         if record[key] != ".":
-            relevant_data.append(record[key])
+            relevant_data.append(float(record[key]))
     else:
         relevant_data.append(0.0)
 
@@ -175,7 +235,7 @@ def append_clinvar_scores_if_present(list_of_scores, record):
 
 def append_neural_network_score_if_present(list_of_important_mutations, record):
     if 'NN_prediction' in record:
-        NN_prediction = record['NN_prediction']
+        NN_prediction = float(record['NN_prediction'])
     else:
         NN_prediction = NEURAL_NETWORK_PREDICTION_NULL_VALUE
     list_of_important_mutations.append(NN_prediction)
