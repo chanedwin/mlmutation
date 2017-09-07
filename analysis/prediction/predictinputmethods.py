@@ -32,36 +32,13 @@ NAME_OF_GENE_FIELD = 'Gene.refGene'
 
 
 def execute_main(paths):
-    start = time.time()
     vcf_object = parse_vcf_data_from_vcf_file(paths)
-    end = time.time()
-    print "parallel took ", (end - start)
-    vcf_object_2 = load_vcf_object_from_input_path(paths)
-    end = time.time()
-    print "sequential took ", (end - start)
-    print double_check_similar_objects(vcf_object, vcf_object_2)
-    # full_list_of_scores = obtain_full_list_of_scores(vcf_object)
-    # perform_tsne(vcf_object)
-    # normalise_scores_in_list_of_scores(full_list_of_scores)
+    perform_tsne(vcf_object)
+    normalise_scores_in_list_of_scores(full_list_of_scores)
     # generate_bayesian_network_and_inference(full_list_of_scores)
     # print_data_of_full_list_of_scores(full_list_of_scores)
     # end_time = time.time()
     # print "time taken", (end_time - start_time)
-
-
-def double_check_similar_objects(first_obj, second_obj):
-    names = tuple(map(lambda x: tuple(x), first_obj))
-    names2 = list(map(lambda x: tuple(x), second_obj))
-    print len(names), len(names2)
-    for entry in names :
-        if entry not in names2 :
-            print entry,"not found in name2"
-        else :
-            names2.remove(entry)
-    print names2
-    first_set = set(map(tuple, first_obj))
-    secnd_set = set(map(tuple, second_obj))
-    return first_set == secnd_set
 
 
 def fast_parse_vcf(vcf_file):
@@ -123,8 +100,6 @@ def get_scores_of_each_record(record):
     append_clinvar_scores(list_of_important_mutations, record)  # TO-FIX make append and generate the same
     append_snp_score(list_of_important_mutations, record)
     append_neural_network_score(list_of_important_mutations, record)
-    if list_of_important_mutations[-1] == 0.063661 :
-        print record.INFO
     return list_of_important_mutations
 
 
@@ -225,14 +200,6 @@ def append_clinvar_scores_if_present(list_of_scores, record):
     list_of_scores.append(clinvar_score)
 
 
-    # SIFT_score [1,0]
-    # LRT_score [1,0]
-    # FATHMM_score[1,0]
-    # MutationTaster[0,1]
-    # MutationAssessor[0,1] = ???
-    # Polyphen2_HVAR_score[0,1]
-
-
 def append_neural_network_score_if_present(list_of_important_mutations, record):
     if 'NN_prediction' in record:
         NN_prediction = float(record['NN_prediction'])
@@ -243,28 +210,34 @@ def append_neural_network_score_if_present(list_of_important_mutations, record):
 
 # MUST CHANGE USE BINARY MAPPING
 def normalise_scores_in_list_of_scores(full_list_of_scores):
-    for i in range(TOTAL_NUMBER_OF_BAYESIAN_FEATURES):
-        min_num = 1000000
-        max_num = -1000000
-        for item in full_list_of_scores:
-            if item[1][i] != None:
-                min_num = min(min_num, item[1][i])
-                max_num = max(max_num, item[1][i])
-        for item in full_list_of_scores:
-            if item[1][i] != None:
-                value = ((item[1][i] - min_num) / (max_num - min_num) + 0.2) / 1.3
-                item[1][i] = value
-            else:
-                item[1][i] = 0.5
+    """
+    SIFT_score : Deleterious (sift<=0.05), Tolerated (sift>0.05) ; Domain = [0,1]
+    'LRT_score'
+    'MutationAssessor_score'
+    'MutationTaster_score'
+    Polyphen2_HVAR_score : Probably damaging (>=0.909), Possibly damaging (0.447<=pp2_hdiv<=0.909)
+    , benign (pp2_hdiv<=0.446) ; Domain  [0,1]
+    'FATHMM_score' D :  < -1.5 ,T : > -1.5
 
+    """
+    bayesian_scores = list(map(lambda x : x[1:-1], full_list_of_scores))
+    mapped_to_zero_one = list(map(lambda x : mapped_sigmoid(x), bayesian_scores))
+
+def mapped_sigmoid(input_list):
+    return list(map(lambda x : sigmoid(x), input_list))
+
+def sigmoid(x):
+    return 1/(1+ np.exp**(-x))
 
 def perform_tsne(full_list_of_scores):
-    array_of_scores = map(lambda x: x[:-2], full_list_of_scores)
-    array_of_mutations = map(lambda x: x[-1], full_list_of_scores)
-    processed_array_of_scores = count_and_impute_nan_values(array_of_scores)
+    array_of_scores = map(lambda x: x[:-3], full_list_of_scores)
+    array_of_mutations = map(lambda x: x[1:], array_of_scores)
+    array_of_names = map(lambda x: x[0], array_of_scores)
+    processed_array_of_scores = count_and_impute_nan_values(array_of_mutations)
     results = sklearn.manifold.TSNE().fit_transform(processed_array_of_scores)
     assert len(results) == len(full_list_of_scores)
-    zipped = zip(array_of_mutations, results)
+    my_list_1, my_list_2 = zip(*results)
+    zipped = zip(array_of_names, my_list_1, my_list_2)
     write_to_csv(zipped, "tsne_results.csv")
     sys.exit()
 
