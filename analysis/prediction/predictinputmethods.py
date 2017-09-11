@@ -38,9 +38,9 @@ NAME_OF_GENE_FIELD = 'Gene.refGene'
 def execute_main(paths):
     vcf_object = parse_vcf_data_from_vcf_file(paths)
     #perform_tsne(vcf_object)
-    #normalised_vcf_object = normalise_scores_in_list_of_scores(vcf_object)
-    #generate_bayesian_network_and_inference(normalised_vcf_object)
-    #print_data_of_full_list_of_scores(normalised_vcf_object)
+    normalised_vcf_object = normalise_scores_in_list_of_scores(vcf_object)
+    generate_bayesian_network_and_inference(normalised_vcf_object)
+    print_data_of_full_list_of_scores(normalised_vcf_object)
     # end_time = time.time()
     # print "time taken", (end_time - start_time)
 
@@ -98,25 +98,27 @@ def async_parse_data(chunk):
     append_neural_network_score_if_present(relevant_data, dict_split_data)
     return relevant_data
 
+
 def append_mutation_taster_score(my_data, record):
-    if 'MutationTaster_pred' in record :
-        if record['MutationTaster_pred'] == 'A' :
+    if 'MutationTaster_pred' in record:
+        if record['MutationTaster_pred'] == 'A':
             my_data.append(0.8)
-        elif record['MutationTaster_pred'] == 'D' :
+        elif record['MutationTaster_pred'] == 'D':
             my_data.append(0.6)
-        elif record['MutationTaster_pred'] == 'N' :
+        elif record['MutationTaster_pred'] == 'N':
             my_data.append(0.4)
-        elif record['MutationTaster_pred'] == 'P' :
+        elif record['MutationTaster_pred'] == 'P':
             my_data.append(0.2)
-        else :
+        else:
             my_data.append(0.2)
-    else :
-        logging.WARN("MutationTaster_pred field not found in vcf entry")
+    else:
         my_data.append(0.2)
+
 
 def iterate_through_relevant_scores(my_data, record, fields):
     for field in fields:
         add_if_record_present_else_add_zero(my_data, record, field)
+
 
 def add_if_record_present_else_add_zero(my_data, record, key):
     if key in record:
@@ -154,17 +156,19 @@ def append_neural_network_score_if_present(list_of_important_mutations, record):
 
 # MUST CHANGE USE BINARY MAPPING
 def normalise_scores_in_list_of_scores(full_list_of_scores):
-    bayesian_scores = list(map(lambda x : normalise_inputs(x), full_list_of_scores))
+    bayesian_scores = list(map(lambda x: normalise_inputs(x), full_list_of_scores))
     floored_bayesian_scores = list(map(lambda x: floor_function(x), bayesian_scores))
     ceiling_bayesian_scores = list(map(lambda x: ceiling_function(x), floored_bayesian_scores))
     return ceiling_bayesian_scores
 
+
 def floor_function(my_data):
-    return list(map(lambda x : 0.2 if (type(x) == float and x < 0.2) else x, my_data))
+    return list(map(lambda x: 0.2 if (type(x) == float and x < 0.2) else x, my_data))
 
 
 def ceiling_function(my_data):
-    return list(map(lambda x : 0.8 if (type(x) == float and x > 0.8) else x, my_data))
+    return list(map(lambda x: 0.8 if (type(x) == float and x > 0.8) else x, my_data))
+
 
 def normalise_inputs(my_data):
     """
@@ -189,18 +193,21 @@ def normalise_inputs(my_data):
     MutationAssessor_score = data_without_header[INDEX_MUTATIONASSESSOR_SCORE]
     PolyPhen_score = data_without_header[INDEX_POLYPHEN_SCORE]
     FATHMM_score = data_without_header[INDEX_FATHMM_SCORE]
-    data_without_header[INDEX_SIFT_SCORE] = 1 - SIFT_score #from [1,0] to [0,1]
-    data_without_header[INDEX_LRT_SCORE] =  1 - LRT_score #from [1,0] to [0,1]
-    data_without_header[INDEX_MUTATIONASSESSOR_SCORE] = sigmoid(MutationAssessor_score)  #from [0,inf) to [0,1]
-    data_without_header[INDEX_POLYPHEN_SCORE] = PolyPhen_score # already [0,1]
-    data_without_header[INDEX_FATHMM_SCORE] = sigmoid(-FATHMM_score) #from (inf,-inf) to [0,1]
-    return [my_data[0],] + data_without_header
+    data_without_header[INDEX_SIFT_SCORE] = 1 - SIFT_score  # from [1,0] to [0,1]
+    data_without_header[INDEX_LRT_SCORE] = 1 - LRT_score  # from [1,0] to [0,1]
+    data_without_header[INDEX_MUTATIONASSESSOR_SCORE] = sigmoid(MutationAssessor_score)  # from [0,inf) to [0,1]
+    data_without_header[INDEX_POLYPHEN_SCORE] = PolyPhen_score  # already [0,1]
+    data_without_header[INDEX_FATHMM_SCORE] = sigmoid(-FATHMM_score)  # from (inf,-inf) to [0,1]
+    return [my_data[0], ] + data_without_header
+
 
 def mapped_sigmoid(input_list):
-    return list(map(lambda x : sigmoid(x), input_list))
+    return list(map(lambda x: sigmoid(x), input_list))
+
 
 def sigmoid(x):
-    return 1/(1+ np.exp(1)**(-x))
+    return 1 / (1 + np.exp(1) ** (-x))
+
 
 def perform_tsne(full_list_of_scores):
     array_of_scores = map(lambda x: x[:-3], full_list_of_scores)
@@ -240,7 +247,7 @@ def generate_bayesian_network_and_inference(full_list_of_scores):
         functional_cdp = get_cdp(7, record[1:8])
         functional_gene = ConditionalProbabilityTable(functional_cdp, [SIFT_gene, LRT_gene, MutationAssessor_gene,
                                                                        PolyPhen2_gene, FATHMM_gene, MutationTaster_gene
-                                                                        , ClinVar_gene])
+            , ClinVar_gene])
         real_gene = DiscreteDistribution({'True': 0.5, 'False': 0.5})
         importgene = ConditionalProbabilityTable(import_cdp, [real_gene, rs_gene, functional_gene])
 
@@ -298,10 +305,11 @@ def write_to_csv(data_matrix, file_name):
             file_writer.writerow(line)
 
 
-
 """
 DEPRECATED METHODS
 """
+
+
 # Deprecated
 def get_scores_of_each_record(record):
     raw_list_of_important_mutations = [record.INFO['SIFT_score'], record.INFO['LRT_score'],
@@ -390,7 +398,6 @@ def obtain_full_list_of_scores(vcf_object):
     end = time.time()
     print "pooled time is", (end - start)
     return full_list_of_scores
-
 
 
 if __name__ == "__main__":
